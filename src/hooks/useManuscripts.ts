@@ -1,33 +1,48 @@
-import { useState, useEffect } from 'react'
-import { supabase } from '../lib/supabase'
-import type { Manuscript } from '../types'
+import { useState, useEffect, useCallback } from 'react'
+import { deleteManuscript, getAllManuscripts, getManuscriptById, type ManuscriptRow } from '../lib/respository/manuscriptRepository'
 
 
 export const useManuscripts = () => {
-  const [manuscripts, setManuscripts] = useState<Manuscript[]>([])
+  const [manuscripts, setManuscripts] = useState<ManuscriptRow[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    refetch()
+  const getManuscripts = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    const { data, error } = await getAllManuscripts()
+    if (error) {
+      setError(error.message || 'Error loading manuscripts')
+      setManuscripts([])
+    } else {
+      setManuscripts(data || []);
+    }
+    setIsLoading(false);
+  }, []);
+
+  const remove = useCallback(async (id: number) => {
+    const { error } = await deleteManuscript(id)
+    if (error) throw error;
+    await getManuscripts();
+  }, [getManuscripts])
+
+  const fetchManuscriptById = useCallback(async (id: number) => {
+    setIsLoading(true)
+    setError(null)
+    const { data, error } = await getManuscriptById(id)
+    if (error) {
+      setError(error.message || 'Error loading manuscript')
+      setManuscripts([])
+    } else {
+      setManuscripts(data || [])
+    }
+    setIsLoading(false)
+    return data ?? null
   }, [])
 
-  const refetch = async () => {
-    try {
-      setIsLoading(true)
-      const { data, error } = await supabase
-        .from('manuscript')
-        .select('*')
-        .order('date_created', { ascending: false })
+  useEffect(() => {
+    void getManuscripts();
+  }, [getManuscripts])
 
-      if (error) throw error
-      setManuscripts(data || [])
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err))
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  return { manuscripts, isLoading, error, refetch }
+  return { manuscripts, isLoading, error, getManuscripts, remove, fetchManuscriptById }
 }

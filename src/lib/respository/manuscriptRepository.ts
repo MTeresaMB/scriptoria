@@ -1,5 +1,6 @@
 import { table } from "./supabaseRepository";
 import type { Database } from "../../types/database";
+import { supabase } from "../supabase";
 
 const TABLE = "manuscript" as const;
 
@@ -25,3 +26,12 @@ export async function deleteManuscript(id: number) {
 export async function getAllManuscripts() {
   return await manuscriptRepo.select();
 }
+
+export async function getManuscriptById(id: number) {
+  return await supabase
+    .from(TABLE)
+    .select()
+    .eq("id_manuscript", id)
+    .single();
+}
+
