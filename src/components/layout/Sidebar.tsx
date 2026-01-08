@@ -1,6 +1,7 @@
-import { Book, BookOpen, Edit3, Home, Link, LogOut, Notebook, User } from "lucide-react";
+import React from 'react';
+import { Book, BookOpen, Edit3, Home, LogOut, Notebook, User } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
-import { useLocation } from "react-router-dom";
 
 export const Sidebar: React.FC = () => {
   const location = useLocation();
@@ -48,22 +49,21 @@ export const Sidebar: React.FC = () => {
           <h1 className="text-xl font-bold text-white">Scriptoria</h1>
         </div>
       </div>
-      
+
       {/* Navigation */}
       <nav className="mt-6">
         <ul className="space-y-1 px-4">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path
-            
+
             return (
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
-                    isActive
-                      ? 'bg-slate-800 text-white border-l-4 border-purple-500'
-                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
-                  }`}
+                  className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${isActive
+                    ? 'bg-slate-800 text-white border-l-4 border-purple-500'
+                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                    }`}
                 >
                   {item.icon}
                   {item.label}

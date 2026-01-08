@@ -1,78 +1,21 @@
-import { Routes, Route, Navigate, useParams, useNavigate } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import { AuthPage } from "../components/layout/AuthPage"
 import { ProtectedRoute } from "../components/layout/ProtectedRoute"
 import { LoginForm } from "../components/auth/LoginForm"
 import { RegisterForm } from "../components/auth/RegisterForm"
-import { Dashboard } from "../pages/Dashboard"
-import { ManuscriptForm } from "../components/manuscripts/ManuscriptForm"
-import { useState, useEffect } from "react"
-import { supabase } from "../lib/supabase"
-import type { Manuscript } from "../types"
-
-function ManuscriptNewPage() {
-  const navigate = useNavigate()
-
-  return (
-    <div className="p-6">
-      <ManuscriptForm
-        onSubmit={() => navigate('/')}
-        onCancel={() => navigate('/')}
-      />
-    </div>
-  )
-}
-
-function ManuscriptEditPage() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [data, setData] = useState<Manuscript | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    if (!id) {
-      setIsLoading(false)
-      return
-    }
-
-    const manuscriptId = parseInt(id, 10)
-    if (isNaN(manuscriptId)) {
-      console.error('Invalid manuscript ID:', id)
-      setIsLoading(false)
-      return
-    }
-
-    (async () => {
-      try {
-        setIsLoading(true)
-        const { data, error } = await supabase
-          .from("manuscript")
-          .select("*")
-          .eq("id_manuscript", manuscriptId)
-          .single()
-
-        if (error) throw error
-        setData(data ?? null)
-      } catch (err) {
-        console.error('Error loading manuscript:', err)
-      } finally {
-        setIsLoading(false)
-      }
-    })()
-  }, [id])
-
-  if (isLoading) return <div className="p-6 text-white">Loading...</div>
-  if (!data) return <div className="p-6 text-white">Manuscript not found</div>
-
-  return (
-    <div className="p-6">
-      <ManuscriptForm
-        initialDataForm={data}
-        onSubmit={() => navigate('/')}
-        onCancel={() => navigate('/')}
-      />
-    </div>
-  )
-}
+import { Dashboard } from "../pages/dashboard/Dashboard"
+import { ManuscriptsPage } from "../pages/manuscripts/ManuscriptsPage"
+import { CharactersPage } from "../pages/characters/CharactersPage"
+import { NotesPage } from "../pages/notes/NotesPage"
+import { ChaptersPage } from "../pages/chapters/ChaptersPage"
+import { ManuscriptEditPage, ManuscriptNewPage } from "./ManuscriptsRoutes"
+import { CharacterEditPage, CharacterNewPage } from "./CharactersRoutes"
+import { ChapterEditPage, ChapterNewPage } from "./ChaptersRoutes"
+import { NoteEditPage, NoteNewPage } from "./NotesRoutes"
+import { ManuscriptDetailPage } from "@/pages/manuscripts/ManuscriptDetailPage"
+import { CharacterDetailPage } from "@/pages/characters/CharacterDetailPage"
+import { NoteDetailPage } from "@/pages/notes/NoteDetailPage"
+import { ChapterDetailPage } from "@/pages/chapters/ChapterDetailPage"
 
 export function AppRoutes() {
   return (
@@ -83,12 +26,32 @@ export function AppRoutes() {
 
       {/* privadas */}
       <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
+      {/* Secciones principales */}
+      <Route path="/manuscripts/:id" element={<ProtectedRoute><ManuscriptDetailPage /></ProtectedRoute>} />
+      <Route path="/manuscripts" element={<ProtectedRoute><ManuscriptsPage /></ProtectedRoute>} />
+      <Route path="/characters/:id" element={<ProtectedRoute><CharacterDetailPage /></ProtectedRoute>} />
+      <Route path="/characters" element={<ProtectedRoute><CharactersPage /></ProtectedRoute>} />
+      <Route path="/notes/:id" element={<ProtectedRoute><NoteDetailPage /></ProtectedRoute>} />
+      <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
+      <Route path="/chapters/:id" element={<ProtectedRoute><ChapterDetailPage /></ProtectedRoute>} />
+      <Route path="/chapters" element={<ProtectedRoute><ChaptersPage /></ProtectedRoute>} />
+
+      {/* Formularios de creación/edición */}
       <Route
         path="/manuscripts/new"
         element={<ProtectedRoute><ManuscriptNewPage /></ProtectedRoute>}
       />
       <Route path="/manuscripts/edit/:id" element={<ProtectedRoute><ManuscriptEditPage /></ProtectedRoute>} />
 
+      <Route path="/characters/new" element={<ProtectedRoute><CharacterNewPage /></ProtectedRoute>} />
+      <Route path="/characters/edit/:id" element={<ProtectedRoute><CharacterEditPage /></ProtectedRoute>} />
+
+      <Route path="/chapters/new" element={<ProtectedRoute><ChapterNewPage /></ProtectedRoute>} />
+      <Route path="/chapters/edit/:id" element={<ProtectedRoute><ChapterEditPage /></ProtectedRoute>} />
+
+      <Route path="/notes/new" element={<ProtectedRoute><NoteNewPage /></ProtectedRoute>} />
+      <Route path="/notes/edit/:id" element={<ProtectedRoute><NoteEditPage /></ProtectedRoute>} />
       {/* fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
