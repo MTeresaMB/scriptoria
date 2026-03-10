@@ -1,9 +1,9 @@
 import { ManuscriptForm } from "@/components/manuscripts/ManuscriptForm";
-import { useReturnNavigation } from "@/hooks/useReturnNavigation";
+import { useReturnNavigation } from "@/hooks/navigation/useReturnNavigation";
 import type { Manuscript } from "@/types";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useManuscripts } from "@/hooks/useManuscripts";
+import { useManuscripts } from "@/hooks/data/useManuscripts";
 import { SkeletonLoader } from "@/components/common/skeletonLoader/SkeletonLoader";
 import { ErrorState } from "@/components/common/errorState/ErrorState";
 

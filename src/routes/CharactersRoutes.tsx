@@ -1,9 +1,9 @@
 import { CharacterForm } from "@/components/characters/CharacterForm";
-import { useReturnNavigation } from "@/hooks/useReturnNavigation";
+import { useReturnNavigation } from "@/hooks/navigation/useReturnNavigation";
 import type { Character } from "@/types";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCharacters } from "@/hooks/useCharacters";
+import { useCharacters } from "@/hooks/data/useCharacters";
 import { SkeletonLoader } from "@/components/common/skeletonLoader/SkeletonLoader";
 import { ErrorState } from "@/components/common/errorState/ErrorState";
 

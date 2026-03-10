@@ -14,3 +14,317 @@
 .animate-slide-in-right {
   animation: slide-in-right 0.3s ease-out;
 }
+
+/* TipTap Editor Styles */
+.ProseMirror {
+  outline: none;
+  min-height: 500px;
+  padding: 1rem;
+  color: #e2e8f0; /* Default dark theme color */
+  line-height: 1.75;
+}
+
+.ProseMirror p {
+  margin: 1em 0;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #64748b;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.editor-theme-light .ProseMirror p.is-editor-empty:first-child::before {
+  color: #9ca3af !important; /* Lighter gray for light theme */
+}
+
+.editor-theme-sepia .ProseMirror p.is-editor-empty:first-child::before {
+  color: #a16207 !important; /* Brown for sepia theme */
+}
+
+.ProseMirror h1 {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0.67em 0;
+  color: #f1f5f9;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 0.75em 0;
+  color: #f1f5f9;
+}
+
+.ProseMirror h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin: 0.83em 0;
+  color: #f1f5f9;
+}
+
+.ProseMirror ul {
+  list-style-type: disc !important;
+  padding-left: 2em !important;
+  margin: 1em 0 !important;
+  list-style-position: outside !important;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal !important;
+  padding-left: 2em !important;
+  margin: 1em 0 !important;
+  list-style-position: outside !important;
+}
+
+.ProseMirror li {
+  margin: 0.5em 0 !important;
+  display: list-item !important;
+  list-style-position: outside !important;
+}
+
+.ProseMirror ul ul {
+  list-style-type: circle !important;
+}
+
+.ProseMirror ul ul ul {
+  list-style-type: square !important;
+}
+
+.ProseMirror ol ol {
+  list-style-type: lower-alpha !important;
+}
+
+.ProseMirror ol ol ol {
+  list-style-type: lower-roman !important;
+}
+
+.ProseMirror a {
+  color: #a78bfa;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror a:hover {
+  color: #c4b5fd;
+}
+
+.ProseMirror strong {
+  font-weight: bold;
+}
+
+.ProseMirror em {
+  font-style: italic;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+}
+
+.ProseMirror code {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #475569;
+  padding-left: 1em;
+  margin: 1em 0;
+  color: #cbd5e1;
+  font-style: italic;
+}
+
+/* Preview Mode Styles */
+.preview-mode {
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.8;
+  color: #e2e8f0;
+}
+
+.preview-mode h1 {
+  font-size: 2.5em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  color: #f1f5f9;
+}
+
+.preview-mode h2 {
+  font-size: 2em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  color: #f1f5f9;
+}
+
+.preview-mode h3 {
+  font-size: 1.5em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  color: #f1f5f9;
+}
+
+.preview-mode p {
+  margin: 1.2em 0;
+  text-align: justify;
+}
+
+.preview-mode a {
+  color: #a78bfa;
+  text-decoration: underline;
+}
+
+.preview-mode strong {
+  font-weight: bold;
+}
+
+.preview-mode em {
+  font-style: italic;
+}
+
+.preview-mode ul,
+.preview-mode ol {
+  margin: 1.2em 0;
+  padding-left: 2em;
+}
+
+.preview-mode li {
+  margin: 0.5em 0;
+}
+
+/* Theme Support */
+.editor-theme-light .ProseMirror,
+.editor-theme-light .ProseMirror p,
+.editor-theme-light .ProseMirror li {
+  color: #1a1a1a !important; /* Dark text for better contrast on white */
+  background-color: #ffffff;
+}
+
+.editor-theme-light .ProseMirror h1,
+.editor-theme-light .ProseMirror h2,
+.editor-theme-light .ProseMirror h3 {
+  color: #000000 !important; /* Black for headings for maximum contrast */
+}
+
+.editor-theme-light .ProseMirror a {
+  color: #7c3aed !important; /* Purple links that are visible on white */
+}
+
+.editor-theme-light .ProseMirror code {
+  background-color: #f3f4f6 !important;
+  color: #1a1a1a !important;
+}
+
+.editor-theme-light .ProseMirror blockquote {
+  border-left-color: #9ca3af !important;
+  color: #374151 !important;
+}
+
+.editor-theme-sepia .ProseMirror,
+.editor-theme-sepia .ProseMirror p,
+.editor-theme-sepia .ProseMirror li {
+  color: #451a03 !important; /* Dark brown text for better contrast on sepia */
+  background-color: #fef3c7;
+}
+
+.editor-theme-sepia .ProseMirror h1,
+.editor-theme-sepia .ProseMirror h2,
+.editor-theme-sepia .ProseMirror h3 {
+  color: #292524 !important; /* Very dark brown for headings */
+}
+
+.editor-theme-sepia .ProseMirror a {
+  color: #7c2d12 !important; /* Dark red-brown links */
+}
+
+.editor-theme-sepia .ProseMirror code {
+  background-color: #fde68a !important;
+  color: #451a03 !important;
+}
+
+.editor-theme-sepia .ProseMirror blockquote {
+  border-left-color: #92400e !important;
+  color: #78350f !important;
+}
+
+/* Font Family Support */
+.editor-font-serif .ProseMirror {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.editor-font-mono .ProseMirror {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Typewriter Mode - Centers the cursor vertically */
+.typewriter-mode .ProseMirror {
+  padding-top: calc(50vh - 200px);
+  padding-bottom: calc(50vh - 200px);
+}
+
+.typewriter-mode .ProseMirror:focus {
+  scroll-padding-top: calc(50vh - 200px);
+}
+
+/* Paragraph Spacing */
+.ProseMirror p {
+  margin-top: var(--paragraph-spacing, 1em);
+  margin-bottom: var(--paragraph-spacing, 1em);
+}
+
+/* Line Numbers (if implemented) */
+.editor-line-numbers {
+  counter-reset: line-number;
+}
+
+.editor-line-numbers .ProseMirror p::before {
+  counter-increment: line-number;
+  content: counter(line-number);
+  display: inline-block;
+  width: 3em;
+  margin-right: 1em;
+  text-align: right;
+  color: #64748b;
+  user-select: none;
+}
+
+/* Writing guide line - horizontal line under focused paragraph */
+.editor-guide-line .ProseMirror p:focus,
+.editor-guide-line .ProseMirror li:focus,
+.editor-guide-line .ProseMirror h1:focus,
+.editor-guide-line .ProseMirror h2:focus,
+.editor-guide-line .ProseMirror h3:focus {
+  position: relative;
+}
+
+.editor-guide-line .ProseMirror p:focus::after,
+.editor-guide-line .ProseMirror li:focus::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.5em;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
+  pointer-events: none;
+}
+
+/* Focus Mode - Highlight current line */
+.focus-mode .ProseMirror p:focus,
+.focus-mode .ProseMirror li:focus,
+.focus-mode .ProseMirror h1:focus,
+.focus-mode .ProseMirror h2:focus,
+.focus-mode .ProseMirror h3:focus {
+  background-color: rgba(139, 92, 246, 0.1);
+  outline: 1px solid rgba(139, 92, 246, 0.3);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+

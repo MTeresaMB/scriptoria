@@ -1,9 +1,10 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { FormEvent } from 'react';
-import { insertNote, updateNote, type NoteInsert, type NoteUpdate } from '@/lib/respository/notesRepository';
-import { useToast } from '@/hooks/useToast';
+import { supabase } from '@/lib/supabase';
+import { insertNote, updateNote, type NoteInsert, type NoteUpdate } from '@/lib/repository/notesRepository';
+import { useToast } from '@/hooks/ui/useToast';
 import { validateRequired, validateMinLength, validateMaxLength } from '@/utils/validations';
-import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
+import { useUnsavedChanges } from '@/hooks/ui/useUnsavedChanges';
 import { cleanOptionalField } from '@/utils/formHelpers';
 import type { Note } from '@/types';
 
@@ -152,8 +153,6 @@ export const useNoteForm = ({ initialData, onSuccess }: UseNoteFormProps) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
-
-    // Validate all fields
     let isValid = true;
     FIELDS_TO_VALIDATE.forEach(field => {
       setTouchedFields(prev => new Set(prev).add(field));
@@ -179,7 +178,13 @@ export const useNoteForm = ({ initialData, onSuccess }: UseNoteFormProps) => {
           onSuccess(data as Note);
         }
       } else {
-        const insertData = buildNoteData({ title }) as NoteInsert;
+        const { data: userData } = await supabase.auth.getUser();
+        if (!userData.user) {
+          toast.error('You must be logged in to create a note');
+          setIsSubmitting(false);
+          return;
+        }
+        const insertData = { ...buildNoteData({ title }), id_user: userData.user.id } as NoteInsert;
         const { data, error } = await insertNote(insertData);
         if (error) throw error;
         if (data) {

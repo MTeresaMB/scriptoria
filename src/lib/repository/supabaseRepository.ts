@@ -1,9 +1,6 @@
 import type { Database } from "../../types/database";
 import { supabase } from "../supabase";
 
-/**
- * Limpia un objeto eliminando campos undefined y validando números
- */
 function cleanInsertData<T extends Record<string, unknown>>(data: T): T {
   const cleaned = { ...data } as Partial<T>;
 
@@ -12,16 +9,13 @@ function cleanInsertData<T extends Record<string, unknown>>(data: T): T {
 
     const value = cleaned[key];
 
-    // Eliminar undefined
     if (value === undefined) {
       delete cleaned[key];
       continue;
     }
 
-    // Validar números para evitar NaN - establecer a 0 si es NaN y es un campo numérico
     if (typeof value === 'number' && isNaN(value)) {
       console.warn(`Campo ${key} tiene valor NaN, se establecerá a 0`);
-      // Para word_count y otros campos numéricos requeridos, establecer a 0
       if (key === 'word_count' || key.includes('count') || key.includes('id_')) {
         (cleaned as Record<string, unknown>)[key] = 0;
       } else {
@@ -43,9 +37,6 @@ export function table<T extends keyof Database['public']['Tables']>(
   type Update = Table['Update'];
 
   return {
-    /**
-     * SELECT * FROM table
-     */
     select: async () => {
       return await supabase.from(tableName).select();
     },
@@ -62,9 +53,6 @@ export function table<T extends keyof Database['public']['Tables']>(
         .single();
     },
 
-    /**
-     * UPDATE table SET ... WHERE key = value
-     */
     update: async (
       matchKey: string,
       matchValue: string | number,
@@ -79,9 +67,6 @@ export function table<T extends keyof Database['public']['Tables']>(
         .single();
     },
 
-    /**
-     * DELETE FROM table WHERE key = value
-     */
     delete: async (matchKey: string, matchValue: string | number) => {
       return await supabase
         .from(tableName)

@@ -114,10 +114,23 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
           </form>
 
           {/* Footer */}
-          <div className="mt-6 text-center">
+          <div className="mt-6 space-y-3 text-center">
+            <p className="text-slate-400 text-sm">
+              <button
+                type="button"
+                onClick={() => navigate('/forgot-password')}
+                className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
+              >
+                Forgot your password?
+              </button>
+            </p>
             <p className="text-slate-400 text-sm">
               Don't have an account?{' '}
-              <button onClick={() => navigate('/register')} className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+              <button
+                type="button"
+                onClick={() => navigate('/register')}
+                className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
+              >
                 Register here
               </button>
             </p>

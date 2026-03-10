@@ -9,6 +9,7 @@ import { formatWordCountNumber, formatDate } from "@/utils/formatters"
 interface ChapterCardProps {
   chapter: Chapter
   onEdit?: (id: number) => void
+  onEditInEditor?: (id: number) => void
   onDelete?: (id: number) => Promise<void>
   onView?: (id: number) => void
   manuscriptTitle?: string
@@ -17,6 +18,7 @@ interface ChapterCardProps {
 export const ChapterCard: React.FC<ChapterCardProps> = memo(({
   chapter,
   onEdit,
+  onEditInEditor,
   onDelete,
   onView,
   manuscriptTitle,
@@ -92,6 +94,7 @@ export const ChapterCard: React.FC<ChapterCardProps> = memo(({
           <CardMenu
             onView={onView ? () => onView(chapter.id_chapter) : undefined}
             onEdit={onEdit ? () => onEdit(chapter.id_chapter) : undefined}
+            onEditInEditor={onEditInEditor ? () => onEditInEditor(chapter.id_chapter) : undefined}
             onDelete={onDelete ? () => setShowConfirmDelete(true) : undefined}
             itemType="chapter"
           />

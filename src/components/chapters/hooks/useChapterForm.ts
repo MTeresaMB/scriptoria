@@ -1,11 +1,11 @@
 import { useState, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 import type { Chapter, ChapterInsert } from '@/types';
-import type { ChapterUpdate } from '@/lib/respository/chaptersRepository';
-import { insertChapter, updateChapter } from '@/lib/respository/chaptersRepository';
-import { useToast } from '@/hooks/useToast';
+import type { ChapterUpdate } from '@/lib/repository/chaptersRepository';
+import { insertChapter, updateChapter } from '@/lib/repository/chaptersRepository';
+import { useToast } from '@/hooks/ui/useToast';
 import { validateRequired, validateMinLength, validateMaxLength, validatePositiveNumber } from '@/utils/validations';
-import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
+import { useUnsavedChanges } from '@/hooks/ui/useUnsavedChanges';
 import { normalizeInputValue, cleanOptionalField, validateWordCount } from '@/utils/formHelpers';
 
 interface UseChapterFormProps {
@@ -134,10 +134,7 @@ export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) 
     if (isUpdate) {
       const updateData: Partial<ChapterUpdate> = {
         name_chapter: baseData.name_chapter,
-        // last_edit is automatically updated by the trigger in Supabase
       };
-
-      // Only include fields that have values (not null/undefined)
       if (wordCount !== null && wordCount !== undefined) {
         updateData.word_count = wordCount;
       }
@@ -150,12 +147,9 @@ export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) 
       if (formData.chapter_number !== null && formData.chapter_number !== undefined) {
         updateData.chapter_number = formData.chapter_number;
       }
-      // Only include id_manuscript if it has a value (not null/undefined)
       if (formData.id_manuscript !== null && formData.id_manuscript !== undefined) {
         updateData.id_manuscript = formData.id_manuscript;
       }
-      // If id_manuscript is null, we omit it from the update (don't send null)
-
       return updateData as ChapterUpdate;
     }
 
@@ -180,8 +174,6 @@ export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) 
   const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-
-    // Validate all fields
     let isValid = true;
     FIELDS_TO_VALIDATE.forEach(field => {
       setTouchedFields(prev => new Set(prev).add(field));
@@ -203,7 +195,6 @@ export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) 
       }
 
       if (initialData?.id_chapter) {
-        // Update
         const updateData = buildChapterData({
           name_chapter: formData.name_chapter.trim(),
         }, true) as ChapterUpdate;
@@ -215,7 +206,6 @@ export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) 
           onSuccess(data as Chapter);
         }
       } else {
-        // Insert
         const insertData = buildChapterData({
           name_chapter: formData.name_chapter.trim(),
           id_user: userData.user.id,

@@ -1,16 +1,9 @@
-/**
- * Utilidades para filtrado, búsqueda y ordenación
- */
-
 export type SortOption = 'recent' | 'oldest' | 'alphabetical' | 'alphabetical-desc' | 'status' | 'word-count';
 
 export interface FilterableItem {
   [key: string]: unknown;
 }
 
-/**
- * Filtra items por texto de búsqueda en campos específicos
- */
 export function filterBySearch<T extends FilterableItem>(
   items: T[],
   searchText: string,
@@ -27,9 +20,6 @@ export function filterBySearch<T extends FilterableItem>(
   );
 }
 
-/**
- * Filtra items por un campo específico
- */
 export function filterByField<T extends FilterableItem>(
   items: T[],
   field: keyof T,
@@ -39,9 +29,6 @@ export function filterByField<T extends FilterableItem>(
   return items.filter((item) => String(item[field]) === value);
 }
 
-/**
- * Ordena items según la opción seleccionada
- */
 export function sortItems<T extends FilterableItem>(
   items: T[],
   sortOption: SortOption,

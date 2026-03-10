@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReturnNavigation } from "@/hooks/useReturnNavigation";
+import { useReturnNavigation } from "@/hooks/navigation/useReturnNavigation";
 import type { Note } from "@/types";
 import { NoteForm } from "@/components/notes/NoteForm";
-import { useNotes } from "@/hooks/useNotes";
+import { useNotes } from "@/hooks/data/useNotes";
 import { SkeletonLoader } from "@/components/common/skeletonLoader/SkeletonLoader";
 import { ErrorState } from "@/components/common/errorState/ErrorState";
 

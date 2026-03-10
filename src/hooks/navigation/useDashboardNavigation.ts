@@ -60,6 +60,10 @@ export const useDashboardNavigation = () => {
     navigate(`/chapters/edit/${id}?from=dashboard`)
   }, [navigate])
 
+  const handleEditChapterInEditor = useCallback((id: number) => {
+    navigate(`/editor?chapter=${id}`)
+  }, [navigate])
+
   const handleViewNote = useCallback((id: number) => {
     navigate(`/notes/${id}?from=dashboard`)
   }, [navigate])
@@ -76,6 +80,7 @@ export const useDashboardNavigation = () => {
     handleEditManuscript,
     handleEditCharacter,
     handleEditChapter,
+    handleEditChapterInEditor,
     handleViewManuscript,
     handleViewCharacter,
     handleViewChapter,

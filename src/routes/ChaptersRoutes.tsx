@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReturnNavigation } from "@/hooks/useReturnNavigation";
+import { useReturnNavigation } from "@/hooks/navigation/useReturnNavigation";
 import type { Chapter } from "@/types";
 import { ChapterForm } from "@/components/chapters/ChapterForm";
-import { useChapters } from "@/hooks/useChapters";
+import { useChapters } from "@/hooks/data/useChapters";
 import { SkeletonLoader } from "@/components/common/skeletonLoader/SkeletonLoader";
 import { ErrorState } from "@/components/common/errorState/ErrorState";
 

@@ -10,10 +10,6 @@ interface BaseCardProps {
   focusRingColor?: string
 }
 
-/**
- * Card base reutilizable para Manuscripts, Characters, etc.
- * Gestiona estilos, foco y accesibilidad básica cuando es clickable.
- */
 export const BaseCard: React.FC<BaseCardProps> = ({
   children,
   onClick,

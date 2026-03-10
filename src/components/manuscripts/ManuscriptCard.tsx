@@ -12,6 +12,7 @@ import { BaseCard } from "../common/baseCard/BaseCard";
 interface ManuscriptCardProps {
   manuscript: Manuscript;
   onEdit?: (id: number) => void;
+  onEditInEditor?: (id: number) => void;
   onDelete?: (id: number) => Promise<void>;
   onView?: (id: number) => void;
 }
@@ -19,6 +20,7 @@ interface ManuscriptCardProps {
 export const ManuscriptCard: React.FC<ManuscriptCardProps> = memo(({
   manuscript,
   onEdit,
+  onEditInEditor,
   onDelete,
   onView
 }) => {
@@ -47,9 +49,17 @@ export const ManuscriptCard: React.FC<ManuscriptCardProps> = memo(({
         ariaLabel={`View manuscript: ${manuscript.title}`}
         className="relative flex overflow-hidden min-h-[140px]"
       >
-        {/* Gradient Sidebar */}
-        <div className={`w-24 min-h-full bg-linear-to-br ${gradientClasses} flex items-center justify-center shrink-0`}>
-          <BookOpen className="w-8 h-8 text-white opacity-50" />
+        {/* Cover / Gradient Sidebar */}
+        <div className={`w-24 min-h-full bg-linear-to-br ${gradientClasses} flex items-center justify-center shrink-0 overflow-hidden`}>
+          {manuscript.picture ? (
+            <img
+              src={manuscript.picture}
+              alt={manuscript.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <BookOpen className="w-8 h-8 text-white opacity-50" />
+          )}
         </div>
 
         {/* Content */}
@@ -59,6 +69,7 @@ export const ManuscriptCard: React.FC<ManuscriptCardProps> = memo(({
             <CardMenu
               onView={onView ? () => onView(manuscript.id_manuscript) : undefined}
               onEdit={onEdit ? () => onEdit(manuscript.id_manuscript) : undefined}
+              onEditInEditor={onEditInEditor ? () => onEditInEditor(manuscript.id_manuscript) : undefined}
               onDelete={onDelete ? () => setShowConfirmDelete(true) : undefined}
               itemType="manuscript"
             />

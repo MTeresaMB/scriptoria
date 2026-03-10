@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, FileText, Calendar, Tag, AlertCircle, BookOpen, ExternalLink } from 'lucide-react';
-import { useReturnNavigation } from '@/hooks/useReturnNavigation';
-import { useToast } from '@/hooks/useToast';
-import { useNotes } from '@/hooks/useNotes';
-import type { NoteRow } from '@/lib/respository/notesRepository';
+import { useReturnNavigation } from '@/hooks/navigation/useReturnNavigation';
+import { useToast } from '@/hooks/ui/useToast';
+import { useNotes } from '@/hooks/data/useNotes';
+import type { NoteRow } from '@/lib/repository/notesRepository';
 import { SkeletonLoader } from '@/components/common/skeletonLoader/SkeletonLoader';
 import { ErrorState } from '@/components/common/errorState/ErrorState';
 import { DeleteConfirmModal } from '@/components/common/deleteConfirmModal/DeleteConfirmModal';
 import { CardMenu } from '@/components/common/cardMenu/CardMenu';
 import { formatDate } from '@/utils/formatters';
-import { useManuscripts } from '@/hooks/useManuscripts';
+import { useManuscripts } from '@/hooks/data/useManuscripts';
 
 export const NoteDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

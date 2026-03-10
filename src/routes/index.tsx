@@ -1,21 +1,26 @@
+import { lazy } from "react"
 import { Routes, Route, Navigate } from "react-router-dom"
 import { AuthPage } from "../components/layout/AuthPage"
 import { ProtectedRoute } from "../components/layout/ProtectedRoute"
 import { LoginForm } from "../components/auth/LoginForm"
 import { RegisterForm } from "../components/auth/RegisterForm"
-import { Dashboard } from "../pages/dashboard/Dashboard"
-import { ManuscriptsPage } from "../pages/manuscripts/ManuscriptsPage"
-import { CharactersPage } from "../pages/characters/CharactersPage"
-import { NotesPage } from "../pages/notes/NotesPage"
-import { ChaptersPage } from "../pages/chapters/ChaptersPage"
+import { ForgotPasswordForm } from "../components/auth/ForgotPasswordForm"
+import { ResetPasswordForm } from "../components/auth/ResetPasswordForm"
+const Dashboard = lazy(() => import("../pages/dashboard/Dashboard").then(m => ({ default: m.Dashboard })))
+const ManuscriptsPage = lazy(() => import("../pages/manuscripts/ManuscriptsPage").then(m => ({ default: m.ManuscriptsPage })))
+const CharactersPage = lazy(() => import("../pages/characters/CharactersPage").then(m => ({ default: m.CharactersPage })))
+const NotesPage = lazy(() => import("../pages/notes/NotesPage").then(m => ({ default: m.NotesPage })))
+const ChaptersPage = lazy(() => import("../pages/chapters/ChaptersPage").then(m => ({ default: m.ChaptersPage })))
 import { ManuscriptEditPage, ManuscriptNewPage } from "./ManuscriptsRoutes"
 import { CharacterEditPage, CharacterNewPage } from "./CharactersRoutes"
 import { ChapterEditPage, ChapterNewPage } from "./ChaptersRoutes"
 import { NoteEditPage, NoteNewPage } from "./NotesRoutes"
-import { ManuscriptDetailPage } from "@/pages/manuscripts/ManuscriptDetailPage"
-import { CharacterDetailPage } from "@/pages/characters/CharacterDetailPage"
-import { NoteDetailPage } from "@/pages/notes/NoteDetailPage"
-import { ChapterDetailPage } from "@/pages/chapters/ChapterDetailPage"
+const ManuscriptDetailPage = lazy(() => import("@/pages/manuscripts/ManuscriptDetailPage").then(m => ({ default: m.ManuscriptDetailPage })))
+const ProfilePage = lazy(() => import("@/pages/profile/ProfilePage").then(m => ({ default: m.ProfilePage })))
+const CharacterDetailPage = lazy(() => import("@/pages/characters/CharacterDetailPage").then(m => ({ default: m.CharacterDetailPage })))
+const NoteDetailPage = lazy(() => import("@/pages/notes/NoteDetailPage").then(m => ({ default: m.NoteDetailPage })))
+const ChapterDetailPage = lazy(() => import("@/pages/chapters/ChapterDetailPage").then(m => ({ default: m.ChapterDetailPage })))
+const EditorPage = lazy(() => import("@/pages/editor/EditorPage").then(m => ({ default: m.EditorPage })))
 
 export function AppRoutes() {
   return (
@@ -23,6 +28,8 @@ export function AppRoutes() {
       {/* públicas */}
       <Route path="/login" element={<AuthPage><LoginForm /></AuthPage>} />
       <Route path="/register" element={<AuthPage><RegisterForm /></AuthPage>} />
+      <Route path="/forgot-password" element={<AuthPage><ForgotPasswordForm /></AuthPage>} />
+      <Route path="/reset-password" element={<AuthPage><ResetPasswordForm /></AuthPage>} />
 
       {/* privadas */}
       <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
@@ -36,6 +43,8 @@ export function AppRoutes() {
       <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
       <Route path="/chapters/:id" element={<ProtectedRoute><ChapterDetailPage /></ProtectedRoute>} />
       <Route path="/chapters" element={<ProtectedRoute><ChaptersPage /></ProtectedRoute>} />
+      <Route path="/editor" element={<ProtectedRoute><EditorPage /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
       {/* Formularios de creación/edición */}
       <Route

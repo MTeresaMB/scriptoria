@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MoreVertical, Eye, Edit, Trash2 } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { MoreVertical, Eye, Edit, Trash2, FileEdit } from 'lucide-react';
 
 interface CardMenuProps {
   onView?: () => void;
   onEdit?: () => void;
+  onEditInEditor?: () => void;
   onDelete?: () => void;
   itemType?: string;
 }
@@ -11,17 +13,35 @@ interface CardMenuProps {
 export const CardMenu: React.FC<CardMenuProps> = ({
   onView,
   onEdit,
+  onEditInEditor,
   onDelete,
   itemType = 'item',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (isOpen && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8,
+        right: window.innerWidth - rect.right,
+      });
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
+      const target = event.target as Node;
+      if (
+        triggerRef.current?.contains(target) ||
+        menuRef.current?.contains(target)
+      ) {
+        return;
       }
+      setIsOpen(false);
     };
 
     if (isOpen) {
@@ -40,13 +60,21 @@ export const CardMenu: React.FC<CardMenuProps> = ({
     }
   };
 
-  const hasActions = onView || onEdit || onDelete;
+  const hasActions = onView || onEdit || onEditInEditor || onDelete;
 
   if (!hasActions) return null;
 
+  const dropdownStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: dropdownPosition.top,
+    right: dropdownPosition.right,
+    zIndex: 9999,
+  };
+
   return (
-    <div className="relative" ref={menuRef}>
+    <div className="relative">
       <button
+        ref={triggerRef}
         onClick={(e) => {
           e.stopPropagation();
           setIsOpen(!isOpen);
@@ -63,13 +91,18 @@ export const CardMenu: React.FC<CardMenuProps> = ({
         <>
           {/* Backdrop para móviles */}
           <div
-            className="fixed inset-0 z-40 md:hidden bg-black/20"
+            className="fixed inset-0 z-9998 md:hidden bg-black/20"
             onClick={() => setIsOpen(false)}
             aria-hidden="true"
           />
 
-          {/* Dropdown Menu */}
-          <div className="absolute right-0 top-full mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-50 py-1">
+          {/* Dropdown Menu - renderizado en portal para evitar recorte por overflow */}
+          {createPortal(
+            <div
+              ref={menuRef}
+              className="w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1"
+              style={dropdownStyle}
+            >
             {onView && (
               <button
                 onClick={(e) => {
@@ -96,6 +129,19 @@ export const CardMenu: React.FC<CardMenuProps> = ({
               </button>
             )}
 
+            {onEditInEditor && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAction(onEditInEditor);
+                }}
+                className="w-full px-4 py-2 text-left text-sm text-purple-300 hover:bg-purple-500/10 hover:text-purple-200 transition-colors flex items-center gap-2 focus:outline-none focus:bg-purple-500/10"
+              >
+                <FileEdit className="w-4 h-4" />
+                <span>Edit in Editor</span>
+              </button>
+            )}
+
             {onDelete && (
               <button
                 onClick={(e) => {
@@ -108,7 +154,9 @@ export const CardMenu: React.FC<CardMenuProps> = ({
                 <span>Delete</span>
               </button>
             )}
-          </div>
+            </div>,
+            document.body
+          )}
         </>
       )}
     </div>

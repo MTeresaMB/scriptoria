@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { CharactersRow } from '@/lib/respository/charactersRepository'
+import type { CharactersRow } from '@/lib/repository/charactersRepository'
 import {
   deleteCharacter,
   getAllCharacters,
   getCharacterById,
   getCharactersByManuscriptId,
-} from '@/lib/respository/charactersRepository'
+} from '@/lib/repository/charactersRepository'
 
 export const useCharacters = () => {
   const [characters, setCharacters] = useState<CharactersRow[]>([])

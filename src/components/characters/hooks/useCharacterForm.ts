@@ -1,10 +1,10 @@
-import { useToast } from "@/hooks/useToast";
-import { updateCharacter, insertCharacter } from "@/lib/respository/charactersRepository";
+import { useToast } from "@/hooks/ui/useToast";
+import { updateCharacter, insertCharacter } from "@/lib/repository/charactersRepository";
 import { supabase } from "@/lib/supabase";
 import type { Character, CharacterInsert, CharacterUpdate } from "@/types";
 import { useCallback, useState, useMemo } from "react";
 import { validateRequired, validateMinLength, validateMaxLength, validateNumberRange } from "@/utils/validations";
-import { useUnsavedChanges } from "@/hooks/useUnsavedChanges";
+import { useUnsavedChanges } from "@/hooks/ui/useUnsavedChanges";
 import { normalizeInputValue, cleanOptionalField } from "@/utils/formHelpers";
 
 interface UseCharacterFormProps {
@@ -49,7 +49,6 @@ export const useCharacterForm = ({ initialData, onSuccess }: UseCharacterFormPro
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
 
-  // Detectar cambios sin guardar
   const hasUnsavedChanges = useMemo(() => {
     if (!initialData) {
       return formData.name.trim() !== '' ||
@@ -106,18 +105,64 @@ export const useCharacterForm = ({ initialData, onSuccess }: UseCharacterFormPro
     return validation.isValid;
   }, []);
 
-  const handleInputChange = useCallback((
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const name = e.target.name;
-    const val = normalizeInputValue(e.target);
+  const handleInputChange = useCallback(
+    async (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    ) => {
+      const name = e.target.name;
 
-    setFormData(prev => ({ ...prev, [name]: val }));
+      if (
+        e.target instanceof HTMLInputElement &&
+        e.target.type === 'file' &&
+        name === 'picture'
+      ) {
+        const file = e.target.files?.[0];
 
-    if (touchedFields.has(name)) {
-      validateField(name, val);
-    }
-  }, [touchedFields, validateField]);
+        if (file) {
+          let val: string | null = null;
+          try {
+            const filePath = `characters/${Date.now()}_${file.name}`;
+            const { error: uploadError } = await supabase.storage
+              .from('character-images')
+              .upload(filePath, file);
+
+            if (uploadError) {
+              throw uploadError;
+            }
+
+            const { data } = supabase.storage
+              .from('character-images')
+              .getPublicUrl(filePath);
+
+            val = data?.publicUrl ?? filePath;
+            toast.success('Image uploaded successfully');
+          } catch (err) {
+            const message =
+              err instanceof Error ? err.message : 'Error uploading image';
+            toast.error(message);
+            val = file.name;
+          }
+
+          setFormData((prev) => ({ ...prev, [name]: val }));
+
+          if (touchedFields.has(name)) {
+            validateField(name, val);
+          }
+
+          return;
+        }
+      }
+
+      const val = normalizeInputValue(e.target);
+
+      setFormData((prev) => ({ ...prev, [name]: val }));
+
+      if (touchedFields.has(name)) {
+        validateField(name, val);
+      }
+    },
+    [touchedFields, validateField, toast],
+  );
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const name = e.target.name;
@@ -141,7 +186,6 @@ export const useCharacterForm = ({ initialData, onSuccess }: UseCharacterFormPro
     e.preventDefault();
     setError(null);
 
-    // Marcar todos los campos como tocados y validar
     const fieldsToValidate = ['name', 'age', 'biography'];
     let isValid = true;
 
@@ -190,7 +234,6 @@ export const useCharacterForm = ({ initialData, onSuccess }: UseCharacterFormPro
       const scars = cleanOptionalField(formData.scars);
 
       if (initialData?.id_character) {
-        // Update
         const updateData: CharacterUpdate = {
           name: formData.name.trim(),
         };
@@ -230,7 +273,6 @@ export const useCharacterForm = ({ initialData, onSuccess }: UseCharacterFormPro
           onSuccess(data);
         }
       } else {
-        // Insert
         const insertData: CharacterInsert = {
           name: formData.name.trim(),
         };

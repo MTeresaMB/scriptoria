@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
-import { useManuscripts } from '@/hooks/useManuscripts';
-import { useCharacters } from '@/hooks/useCharacters';
-import { useChapters } from '@/hooks/useChapters';
-import { useReturnNavigation } from '@/hooks/useReturnNavigation';
-import { useToast } from '@/hooks/useToast';
-import type { ManuscriptRow } from '@/lib/respository/manuscriptRepository';
+import { useManuscripts } from '@/hooks/data/useManuscripts';
+import { useCharacters } from '@/hooks/data/useCharacters';
+import { useChapters } from '@/hooks/data/useChapters';
+import { useReturnNavigation } from '@/hooks/navigation/useReturnNavigation';
+import { useToast } from '@/hooks/ui/useToast';
+import type { ManuscriptRow } from '@/lib/repository/manuscriptRepository';
 import { SkeletonLoader } from '@/components/common/skeletonLoader/SkeletonLoader';
 import { ErrorState } from '@/components/common/errorState/ErrorState';
 import { DeleteConfirmModal } from '@/components/common/deleteConfirmModal/DeleteConfirmModal';
 import { CardMenu } from '@/components/common/cardMenu/CardMenu';
 import { StatusBadge } from '@/components/common/statusBadge/StatusBadge';
 import { ProgressBar } from '@/components/common/progressBar/ProgressBar';
-import { formatWordCount, formatDate, calculateProgress } from '@/utils/formatters';
+import { formatWordCount, formatDate, formatReadingTime, calculateProgress } from '@/utils/formatters';
 import { getStatusGradientClasses } from '@/utils/statusColors';
 import { CharacterCard } from '@/components/characters/CharacterCard';
-import { ChapterCard } from '@/components/chapters/ChapterCard';
+import { SortableChaptersGrid } from '@/components/chapters/SortableChaptersGrid';
 
 export const ManuscriptDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +30,8 @@ export const ManuscriptDetailPage: React.FC = () => {
   const {
     chapters: relatedChapters,
     fetchChaptersByManuscriptId,
+    remove: removeChapter,
+    reorder: reorderChapters,
   } = useChapters();
   const { toast } = useToast();
 
@@ -94,6 +96,16 @@ export const ManuscriptDetailPage: React.FC = () => {
 
   const handleCancelDelete = () => {
     setShowDeleteModal(false);
+  };
+
+  const handleDeleteChapter = async (chapterId: number) => {
+    try {
+      await removeChapter(chapterId);
+      toast.success('Chapter deleted successfully');
+    } catch (err) {
+      console.error('Error deleting chapter:', err);
+      toast.error('Failed to delete chapter');
+    }
   };
 
   const handleRetry = () => {
@@ -191,8 +203,16 @@ export const ManuscriptDetailPage: React.FC = () => {
 
         <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
           <div className="flex items-start gap-6">
-            <div className={`w-20 h-20 rounded-xl bg-linear-to-br ${gradientClasses} flex items-center justify-center shrink-0`}>
-              <BookOpen className="w-10 h-10 text-white opacity-80" />
+            <div className={`w-20 h-20 rounded-xl bg-linear-to-br ${gradientClasses} flex items-center justify-center shrink-0 overflow-hidden`}>
+              {manuscript.picture ? (
+                <img
+                  src={manuscript.picture}
+                  alt={manuscript.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <BookOpen className="w-10 h-10 text-white opacity-80" />
+              )}
             </div>
 
             <div className="flex-1 min-w-0">
@@ -229,6 +249,9 @@ export const ManuscriptDetailPage: React.FC = () => {
             <h3 className="text-sm font-medium text-slate-400 mb-2">Word Count</h3>
             <p className="text-2xl font-bold text-white">
               {formatWordCount(manuscript?.word_count ?? 0)}
+            </p>
+            <p className="text-xs text-slate-500 mt-1">
+              {formatReadingTime(manuscript?.word_count ?? 0)} read
             </p>
           </div>
 
@@ -307,15 +330,21 @@ export const ManuscriptDetailPage: React.FC = () => {
           {relatedChapters.length === 0 ? (
             <p className="text-slate-500 text-sm">No chapters created for this manuscript yet.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {relatedChapters.map((chapter) => (
-                <ChapterCard
-                  key={chapter.id_chapter}
-                  chapter={chapter}
-                  onView={(id) => navigate(`/chapters/${id}?from=manuscript-detail`)}
-                />
-              ))}
-            </div>
+            <SortableChaptersGrid
+              chapters={relatedChapters}
+              manuscriptTitle={manuscript?.title}
+              onReorder={async (ids) => {
+                try {
+                  await reorderChapters(ids, manuscript!.id_manuscript);
+                  toast.success('Chapters reordered');
+                } catch {
+                  toast.error('Failed to reorder');
+                }
+              }}
+              onView={(id) => navigate(`/chapters/${id}?from=manuscript-detail`)}
+              onEditInEditor={(id) => navigate(`/editor?chapter=${id}`)}
+              onDelete={handleDeleteChapter}
+            />
           )}
         </div>
       </div>

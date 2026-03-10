@@ -1,11 +1,11 @@
 import React, { useMemo } from "react"
-import { useChapters } from "@/hooks/useChapters"
-import { LoadingSpinner } from "@/components/layout/LoadinSpinner"
+import { useChapters } from "@/hooks/data/useChapters"
+import { LoadingSpinner } from '@/components/layout/LoadingSpinner';
 import { EmptyState } from "@/components/common/emptyState/EmptyState"
 import { ErrorState } from "@/components/common/errorState/ErrorState"
 import { ChapterCard } from "@/components/chapters/ChapterCard"
 import { FileText, BookOpen } from "lucide-react"
-import { useManuscripts } from "@/hooks/useManuscripts"
+import { useManuscripts } from "@/hooks/data/useManuscripts"
 import { SearchBar } from "@/components/common/searchBar/SearchBar"
 import { FilterBar } from "@/components/common/filterBar/FilterBar"
 import { SortSelect } from "@/components/common/sortSelect/SortSelect"
@@ -52,6 +52,7 @@ export const ChaptersList: React.FC<ChaptersListProps> = ({ onCreateNewChapter }
   const {
     handleCreateChapter,
     handleEditChapter,
+    handleEditChapterInEditor,
     handleViewChapter,
     handleDeleteChapter,
   } = useChapterActions({ onCreateNewChapter })
@@ -159,6 +160,7 @@ export const ChaptersList: React.FC<ChaptersListProps> = ({ onCreateNewChapter }
                       manuscriptTitle={getManuscriptTitle(chapter.id_manuscript)}
                       onView={handleViewChapter}
                       onEdit={handleEditChapter}
+                      onEditInEditor={handleEditChapterInEditor}
                       onDelete={handleDeleteChapter}
                     />
                   ))}

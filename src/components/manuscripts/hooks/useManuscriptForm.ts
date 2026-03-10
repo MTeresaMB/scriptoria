@@ -1,11 +1,11 @@
 import { useState, useCallback, useMemo } from 'react';
 import { supabase } from '@lib/supabase';
 import type { Manuscript, ManuscriptInsert } from '@types';
-import type { ManuscriptUpdate } from '@lib/respository/manuscriptRepository';
-import { insertManuscript, updateManuscript } from '@lib/respository/manuscriptRepository';
-import { useToast } from '@/hooks/useToast';
+import type { ManuscriptUpdate } from '@lib/repository/manuscriptRepository';
+import { insertManuscript, updateManuscript } from '@lib/repository/manuscriptRepository';
+import { useToast } from '@/hooks/ui/useToast';
 import { validateRequired, validateMinLength, validateMaxLength, validatePositiveNumber } from '@/utils/validations';
-import { useUnsavedChanges } from '@/hooks/useUnsavedChanges';
+import { useUnsavedChanges } from '@/hooks/ui/useUnsavedChanges';
 import { normalizeInputValue, cleanOptionalField, validateWordCountWithDefault } from '@/utils/formHelpers';
 
 interface UseManuscriptFormProps {
@@ -32,17 +32,14 @@ export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormP
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
 
-  // Detectar cambios sin guardar
   const hasUnsavedChanges = useMemo(() => {
     if (!initialData) {
-      // En creación, hay cambios si hay algún campo con valor
       return formData.title.trim() !== '' ||
         formData.summary !== null ||
         (formData.word_count ?? 0) > 0 ||
         formData.genre !== null ||
         formData.target_audience !== null;
     }
-    // En edición, comparar con datos iniciales
     return formData.title !== initialData.title ||
       formData.summary !== (initialData.summary ?? null) ||
       formData.word_count !== (initialData.word_count ?? 0) ||
@@ -91,23 +88,68 @@ export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormP
     return validation.isValid;
   }, []);
 
-  const handleInputChange = useCallback((
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const name = e.target.name;
-    let val = normalizeInputValue(e.target);
+  const handleInputChange = useCallback(
+    async (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    ) => {
+      const name = e.target.name;
 
-    // For number inputs in manuscripts, default to 0 instead of null
-    if (e.target instanceof HTMLInputElement && e.target.type === 'number') {
-      val = val ?? 0;
-    }
+      if (
+        e.target instanceof HTMLInputElement &&
+        e.target.type === 'file' &&
+        name === 'picture'
+      ) {
+        const file = e.target.files?.[0];
 
-    setFormData(prev => ({ ...prev, [name]: val }));
+        if (file) {
+          let val: string | null = null;
+          try {
+            const filePath = `manuscripts/${Date.now()}_${file.name}`;
+            const { error: uploadError } = await supabase.storage
+              .from('manuscript-images')
+              .upload(filePath, file);
 
-    if (touchedFields.has(name)) {
-      validateField(name, val);
-    }
-  }, [touchedFields, validateField]);
+            if (uploadError) {
+              throw uploadError;
+            }
+
+            const { data } = supabase.storage
+              .from('manuscript-images')
+              .getPublicUrl(filePath);
+
+            val = data?.publicUrl ?? filePath;
+            toast.success('Image uploaded successfully');
+          } catch (err) {
+            const message =
+              err instanceof Error ? err.message : 'Error uploading image';
+            toast.error(message);
+            val = file.name;
+          }
+
+          setFormData((prev) => ({ ...prev, [name]: val }));
+
+          if (touchedFields.has(name)) {
+            validateField(name, val);
+          }
+
+          return;
+        }
+      }
+
+      let val = normalizeInputValue(e.target);
+
+      if (e.target instanceof HTMLInputElement && e.target.type === 'number') {
+        val = val ?? 0;
+      }
+
+      setFormData((prev) => ({ ...prev, [name]: val }));
+
+      if (touchedFields.has(name)) {
+        validateField(name, val);
+      }
+    },
+    [touchedFields, validateField, toast],
+  );
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const name = e.target.name;
@@ -119,7 +161,6 @@ export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormP
     e.preventDefault();
     setError(null);
 
-    // Marcar todos los campos como tocados y validar
     const fieldsToValidate = ['title', 'word_count', 'summary'];
     let isValid = true;
 
@@ -149,7 +190,6 @@ export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormP
       const targetAudience = cleanOptionalField(formData.target_audience);
 
       if (initialData?.id_manuscript) {
-        // Update
         const updateData: ManuscriptUpdate = {
           title: formData.title.trim(),
           status: formData.status ?? 'Draft',
@@ -168,7 +208,6 @@ export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormP
           onSuccess(data);
         }
       } else {
-        // Insert
         const insertData: ManuscriptInsert = {
           title: formData.title.trim(),
           id_user: userData.user.id,

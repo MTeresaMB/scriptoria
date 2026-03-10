@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
-import { useCharacters } from "@/hooks/useCharacters";
-import { useToast } from "@/hooks/useToast";
+import { useCharacters } from "@/hooks/data/useCharacters";
+import { useToast } from "@/hooks/ui/useToast";
 import { useNavigate } from "react-router-dom";
-import { LoadingSpinner } from "../layout/LoadinSpinner";
+import { LoadingSpinner } from '../layout/LoadingSpinner';
 import { User } from "lucide-react";
 import { EmptyState } from "../common/emptyState/EmptyState";
 import { CharacterCard } from "./CharacterCard";
@@ -27,14 +27,8 @@ export const CharactersList: React.FC<CharactersListProps> = ({ onCreateNewChara
 
   const filteredAndSortedCharacters = useMemo(() => {
     let filtered = characters || [];
-
-    // Búsqueda
     filtered = filterBySearch(filtered, searchText, ['name', 'role']);
-
-    // Filtro por rol
     filtered = filterByField(filtered, 'role', roleFilter);
-
-    // Ordenación
     filtered = sortItems(
       filtered,
       sortOption,

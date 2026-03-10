@@ -1,6 +1,6 @@
 import React from "react";
 import type { Note } from "@/types";
-import { useManuscripts } from "@/hooks/useManuscripts";
+import { useManuscripts } from "@/hooks/data/useManuscripts";
 import { useNoteForm } from "./hooks/useNoteForm";
 
 interface NoteFormProps {

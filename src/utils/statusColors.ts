@@ -1,7 +1,3 @@
-/**
- * Sistema de colores centralizado para status
- */
-
 export type StatusType = 'completed' | 'draft' | 'in progress' | string;
 
 export interface StatusColors {
@@ -40,17 +36,11 @@ const statusColorMap: Record<string, StatusColors> = {
   },
 };
 
-/**
- * Obtiene los colores para un status dado
- */
 export const getStatusColors = (status: string | null | undefined): StatusColors => {
   const statusLower = (status ?? 'draft').toLowerCase();
   return statusColorMap[statusLower] || statusColorMap['draft'];
 };
 
-/**
- * Obtiene las clases CSS para el badge de status
- */
 export const getStatusBadgeClasses = (status: string | null | undefined): string => {
   return getStatusColors(status).badge;
 };
@@ -63,9 +53,6 @@ export const getStatusGradientClasses = (status: string | null | undefined): str
   return `${colors.gradient.from} ${colors.gradient.to}`;
 };
 
-/**
- * Obtiene el color de la barra de progreso según status
- */
 export const getStatusProgressColor = (status: string | null | undefined): string => {
   return getStatusColors(status).progress;
 };

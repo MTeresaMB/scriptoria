@@ -24,14 +24,42 @@ export async function deleteManuscript(id: number) {
 }
 
 export async function getAllManuscripts() {
-  return await manuscriptRepo.select();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { data: [], error: null };
+  return await supabase
+    .from(TABLE)
+    .select()
+    .eq("id_user", user.id);
 }
 
 export async function getManuscriptById(id: number) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { data: null, error: { message: "Not authenticated" } as Error };
   return await supabase
     .from(TABLE)
     .select()
     .eq("id_manuscript", id)
+    .eq("id_user", user.id)
     .single();
+}
+
+export async function recalculateManuscriptWordCount(id: number) {
+  const { data: chapters, error } = await supabase
+    .from("chapter")
+    .select("word_count")
+    .eq("id_manuscript", id);
+
+  if (error) {
+    return { data: null, error };
+  }
+
+  const totalWords =
+    chapters?.reduce(
+      (acc: number, ch: { word_count: number | null }) =>
+        acc + (ch.word_count || 0),
+      0,
+    ) || 0;
+
+  return await updateManuscript(id, { word_count: totalWords });
 }
 

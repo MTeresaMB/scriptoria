@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { deleteNote, getAllNotes, getNoteById, getNotesByManuscriptId, type NoteRow } from '../lib/respository/notesRepository'
+import { deleteNote, getAllNotes, getNoteById, getNotesByManuscriptId, type NoteRow } from '@/lib/repository/notesRepository'
 
 export const useNotes = () => {
   const [notes, setNotes] = useState<NoteRow[]>([])

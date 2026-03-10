@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { deleteManuscript, getAllManuscripts, getManuscriptById, type ManuscriptRow } from '../lib/respository/manuscriptRepository'
+import { deleteManuscript, getAllManuscripts, getManuscriptById, type ManuscriptRow } from '@/lib/repository/manuscriptRepository'
 
 
 export const useManuscripts = () => {

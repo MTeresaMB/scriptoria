@@ -1,13 +1,16 @@
 import { AppRoutes } from "./routes"
 import { ToastProvider } from "./components/common/toast/ToastContext"
 import { ToastContainer } from "./components/common/toast/ToastContainer"
+import { ThemeProvider } from "./contexts/ThemeContext"
 
 function App() {
   return (
-    <ToastProvider>
-      <AppRoutes />
-      <ToastContainer />
-    </ToastProvider>
+    <ThemeProvider>
+      <ToastProvider>
+        <AppRoutes />
+        <ToastContainer />
+      </ToastProvider>
+    </ThemeProvider>
   )
 }
 

@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from "react";
-import { useNotes } from "@/hooks/useNotes";
-import { useToast } from "@/hooks/useToast";
+import { useNotes } from "@/hooks/data/useNotes";
+import { useToast } from "@/hooks/ui/useToast";
 import { useNavigate } from "react-router-dom";
-import { LoadingSpinner } from "../layout/LoadinSpinner";
+import { LoadingSpinner } from '../layout/LoadingSpinner';
 import { FileText } from "lucide-react";
 import { EmptyState } from "../common/emptyState/EmptyState";
 import { NoteCard } from "./NoteCard";
 import { ErrorState } from "../common/errorState/ErrorState";
-import { useManuscripts } from "@/hooks/useManuscripts";
+import { useManuscripts } from "@/hooks/data/useManuscripts";
 import { SearchBar } from "../common/searchBar/SearchBar";
 import { FilterBar } from "../common/filterBar/FilterBar";
 import { SortSelect } from "../common/sortSelect/SortSelect";
@@ -30,15 +30,9 @@ export const NotesList: React.FC<NotesListProps> = ({ onCreateNewNote }) => {
 
   const filteredAndSortedNotes = useMemo(() => {
     let filtered = notes || [];
-
-    // Búsqueda
     filtered = filterBySearch(filtered, searchText, ['title', 'content', 'category']);
-
-    // Filtros
     filtered = filterByField(filtered, 'category', categoryFilter);
     filtered = filterByField(filtered, 'priority', priorityFilter);
-
-    // Ordenación
     filtered = sortItems(
       filtered,
       sortOption,

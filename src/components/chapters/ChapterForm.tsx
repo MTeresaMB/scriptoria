@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import type { Chapter } from "@/types";
-import { useManuscripts } from "@/hooks/useManuscripts";
+import { useManuscripts } from "@/hooks/data/useManuscripts";
 import { useChapterForm } from "./hooks/useChapterForm";
 
 interface ChapterFormProps {
@@ -22,7 +22,6 @@ export const ChapterForm: React.FC<ChapterFormProps> = ({
     onSuccess: onSubmit,
   });
 
-  // Notify parent of changes if onChange is provided
   useEffect(() => {
     if (onChange) {
       onChange(formData as Partial<Chapter>);

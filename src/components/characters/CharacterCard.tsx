@@ -34,7 +34,6 @@ export const CharacterCard: React.FC<CharacterCardProps> = memo(({
     }
   };
 
-  // Helper para obtener iniciales
   const getInitials = useCallback((name: string): string => {
     return name
       .split(' ')

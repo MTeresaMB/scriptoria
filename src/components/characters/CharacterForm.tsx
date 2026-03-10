@@ -1,6 +1,6 @@
 import React from "react";
 import type { Character } from "@/types";
-import { useManuscripts } from "@/hooks/useManuscripts";
+import { useManuscripts } from "@/hooks/data/useManuscripts";
 import { useCharacterForm } from "./hooks/useCharacterForm";
 
 interface CharacterFormProps {

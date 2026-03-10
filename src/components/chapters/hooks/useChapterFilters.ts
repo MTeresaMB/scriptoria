@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { filterBySearch, filterByField, sortItems, type SortOption } from '@/utils/filters'
-import type { ChapterRow } from '@/lib/respository/chaptersRepository'
+import type { ChapterRow } from '@/lib/repository/chaptersRepository'
 
 export const useChapterFilters = (chapters: ChapterRow[] | undefined) => {
   const [searchText, setSearchText] = useState('')
@@ -9,14 +9,8 @@ export const useChapterFilters = (chapters: ChapterRow[] | undefined) => {
 
   const filteredAndSortedChapters = useMemo(() => {
     let filtered = chapters || []
-
-    // Búsqueda
     filtered = filterBySearch(filtered, searchText, ['name_chapter', 'summary'])
-
-    // Filtro por estado
     filtered = filterByField(filtered, 'status', statusFilter)
-
-    // Ordenación
     filtered = sortItems(
       filtered,
       sortOption,

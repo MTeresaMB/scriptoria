@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from "react";
-import { useManuscripts } from "@hooks/useManuscripts";
-import { LoadingSpinner } from "@components/layout/LoadinSpinner";
+import { useManuscripts } from "@/hooks/data/useManuscripts";
+import { LoadingSpinner } from '@components/layout/LoadingSpinner';
 import { BookOpen } from "lucide-react";
 import { ManuscriptCard } from "./ManuscriptCard";
 import { EmptyState } from "@/components/common/emptyState/EmptyState";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/useToast";
+import { useToast } from "@/hooks/ui/useToast";
 import { ErrorState } from "../common/errorState/ErrorState";
 import { SearchBar } from "../common/searchBar/SearchBar";
 import { FilterBar } from "../common/filterBar/FilterBar";
@@ -28,14 +28,8 @@ export const ManuscriptsList: React.FC<ManuscriptsListProps> = ({ onCreateNewMan
 
   const filteredAndSortedManuscripts = useMemo(() => {
     let filtered = manuscripts || [];
-
-    // Búsqueda
     filtered = filterBySearch(filtered, searchText, ['title', 'genre']);
-
-    // Filtro por estado
     filtered = filterByField(filtered, 'status', statusFilter);
-
-    // Ordenación
     filtered = sortItems(
       filtered,
       sortOption,
@@ -75,6 +69,10 @@ export const ManuscriptsList: React.FC<ManuscriptsListProps> = ({ onCreateNewMan
 
   const handleEditManuscript = (id: number) => {
     navigate(`/manuscripts/edit/${id}?from=manuscripts`);
+  }
+
+  const handleEditInEditor = (id: number) => {
+    navigate(`/editor?manuscript=${id}`);
   }
 
   const handleDeleteManuscript = async (id: number) => {
@@ -161,6 +159,7 @@ export const ManuscriptsList: React.FC<ManuscriptsListProps> = ({ onCreateNewMan
               onView={handleViewManuscript}
               onDelete={handleDeleteManuscript}
               onEdit={handleEditManuscript}
+              onEditInEditor={handleEditInEditor}
             />
           ))}
         </div>

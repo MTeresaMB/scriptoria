@@ -1,10 +1,3 @@
-/**
- * Utility functions for form handling
- */
-
-/**
- * Normalizes input value based on element type
- */
 export const normalizeInputValue = (
   element: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 ): string | number | null => {
@@ -25,14 +18,10 @@ export const normalizeInputValue = (
     return value === '' ? null : value;
   }
 
-  // HTMLTextAreaElement
   const trimmed = value.trim();
   return trimmed === '' ? null : trimmed;
 };
 
-/**
- * Cleans optional string field - trims and converts empty strings to null
- */
 export const cleanOptionalField = (value: unknown): string | null => {
   if (!value || typeof value !== 'string') return null;
   const trimmed = value.trim();
@@ -54,17 +43,11 @@ export const validateWordCount = (value: unknown): number | null => {
   return null;
 };
 
-/**
- * Validates and normalizes word count value (returns 0 instead of null for manuscripts)
- */
 export const validateWordCountWithDefault = (value: unknown): number => {
   const result = validateWordCount(value);
   return result ?? 0;
 };
 
-/**
- * Removes a field from field errors object
- */
 export const removeFieldError = (
   errors: Record<string, string>,
   fieldName: string

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { ChapterRow } from '@/lib/respository/chaptersRepository'
+import type { ChapterRow } from '@/lib/repository/chaptersRepository'
 
 export interface GroupColor {
   bg: string
@@ -19,7 +19,6 @@ const GROUP_COLORS: GroupColor[] = [
 ]
 
 export const useChapterGrouping = (chapters: ChapterRow[]) => {
-  // Agrupar capítulos por manuscript
   const groupedChapters = useMemo(() => {
     const groups: Map<number | 'no-manuscript', ChapterRow[]> = new Map()
 
@@ -34,12 +33,10 @@ export const useChapterGrouping = (chapters: ChapterRow[]) => {
     return groups
   }, [chapters])
 
-  // Función para obtener el color de un grupo basado en su ID
   const getGroupColor = (manuscriptId: number | 'no-manuscript'): GroupColor => {
     if (manuscriptId === 'no-manuscript') {
-      return GROUP_COLORS[GROUP_COLORS.length - 1] // Último color para "No Manuscript"
+      return GROUP_COLORS[GROUP_COLORS.length - 1]
     }
-    // Usar el ID del manuscript para asignar un color consistente
     return GROUP_COLORS[(manuscriptId as number) % (GROUP_COLORS.length - 1)]
   }
 

@@ -6,5 +6,4 @@ export * from './cardMenu/CardMenu';
 export * from './deleteConfirmModal/DeleteConfirmModal';
 export * from './progressBar/ProgressBar';
 export * from './statValueSkeleton/StatValueSkeleton';
-export * from './toast/Toast';
 export * from './statusBadge/StatusBadge';

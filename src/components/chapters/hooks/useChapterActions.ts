@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useToast } from '@/hooks/useToast'
-import { useChapters } from '@/hooks/useChapters'
+import { useToast } from '@/hooks/ui/useToast'
+import { useChapters } from '@/hooks/data/useChapters'
 
 interface UseChapterActionsProps {
   onCreateNewChapter?: () => void
@@ -21,6 +21,10 @@ export const useChapterActions = ({ onCreateNewChapter }: UseChapterActionsProps
     navigate(`/chapters/edit/${id}?from=chapters`)
   }, [navigate])
 
+  const handleEditChapterInEditor = useCallback((id: number) => {
+    navigate(`/editor?chapter=${id}`)
+  }, [navigate])
+
   const handleViewChapter = useCallback((id: number) => {
     navigate(`/chapters/${id}?from=chapters`)
   }, [navigate])
@@ -37,6 +41,7 @@ export const useChapterActions = ({ onCreateNewChapter }: UseChapterActionsProps
   return {
     handleCreateChapter,
     handleEditChapter,
+    handleEditChapterInEditor,
     handleViewChapter,
     handleDeleteChapter,
   }
