@@ -1,26 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BookOpen, Users, FileText, ArrowRight, Plus, ScrollText } from 'lucide-react'
 import { formatWordCountNumber, calculateProgress, getInitials, formatDate } from '@/utils/formatters';
 import { getStatusGradientClasses } from '@/utils/statusColors';
 import { StatusBadge } from '@/components/common/statusBadge/StatusBadge';
 import { ProgressBar } from '@/components/common/progressBar/ProgressBar';
-import { useDashboardStats } from '@/hooks/useDashboardStats';
+import { useDashboardStats } from '@/hooks/ui/useDashboardStats';
 import { SkeletonLoader } from '@/components/common/skeletonLoader/SkeletonLoader';
 import { StatValueSkeleton } from '@/components/common/statValueSkeleton/StatValueSkeleton';
-import { useDashboardNavigation } from '@/hooks/useDashboardNavigation';
-import { useCharacters } from '@/hooks/useCharacters';
-import { useManuscripts } from '@/hooks/useManuscripts';
-import { useChapters } from '@/hooks/useChapters';
-import { useNotes } from '@/hooks/useNotes';
-import { CardMenu } from '@/components/common/cardMenu/CardMenu';
+import { useDashboardNavigation } from '@/hooks/navigation/useDashboardNavigation';
+import { useCharacters } from '@/hooks/data/useCharacters';
+import { useManuscripts } from '@/hooks/data/useManuscripts';
+import { useChapters } from '@/hooks/data/useChapters';
+import { useNotes } from '@/hooks/data/useNotes';
+import { useStats } from '@/hooks/data/useStats';
+import { CardMenu } from '@/components/common/cardMenu/CardMenu'
+import { DeleteConfirmModal } from '@/components/common/deleteConfirmModal/DeleteConfirmModal'
+import { useToast } from '@/hooks/ui/useToast'
 
 const RECENT_ITEMS_COUNT = 3
 
 export const Dashboard: React.FC = () => {
+  const { toast } = useToast()
   const { manuscripts, isLoading: loadingManuscripts } = useManuscripts()
   const { characters, isLoading: loadingCharacters } = useCharacters()
-  const { chapters, isLoading: loadingChapters } = useChapters()
+  const { chapters, isLoading: loadingChapters, remove: removeChapter } = useChapters()
   const { notes, isLoading: loadingNotes } = useNotes()
+  const { stats, refreshStats } = useStats()
+  const [chapterToDelete, setChapterToDelete] = useState<{ id: number; name: string } | null>(null)
+  const [isDeletingChapter, setIsDeletingChapter] = useState(false)
 
   const {
     handleViewAllManuscripts,
@@ -32,13 +39,41 @@ export const Dashboard: React.FC = () => {
     handleCreateNote,
     handleCreateChapter,
     handleEditChapter,
+    handleEditChapterInEditor,
     handleViewManuscript,
     handleViewCharacter,
     handleViewChapter,
     handleViewNote,
   } = useDashboardNavigation()
 
-  const stats = useDashboardStats(manuscripts, characters, chapters, notes)
+  const dashboardStats = useDashboardStats(manuscripts, characters, chapters, notes, stats)
+
+  useEffect(() => {
+    void refreshStats()
+  }, [refreshStats])
+
+  const handleDeleteChapter = (id: number, name: string) => {
+    setChapterToDelete({ id, name })
+  }
+
+  const handleConfirmDeleteChapter = async () => {
+    if (!chapterToDelete) return
+    setIsDeletingChapter(true)
+    try {
+      await removeChapter(chapterToDelete.id)
+      await refreshStats()
+      toast.success('Chapter deleted successfully')
+      setChapterToDelete(null)
+    } catch {
+      toast.error('Failed to delete chapter')
+    } finally {
+      setIsDeletingChapter(false)
+    }
+  }
+
+  const handleCancelDeleteChapter = () => {
+    setChapterToDelete(null)
+  }
 
   return (
     <>
@@ -84,7 +119,7 @@ export const Dashboard: React.FC = () => {
 
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-            {stats.map((stat) => {
+            {dashboardStats.map((stat) => {
               const Icon = stat.icon
               return (
                 <div key={stat.title} className={`${stat.bgColor} rounded-xl p-6 border border-slate-700`}>
@@ -145,9 +180,17 @@ export const Dashboard: React.FC = () => {
                         }}
                         aria-label={`View manuscript: ${manuscript.title}`}
                       >
-                        {/* Gradient Sidebar */}
-                        <div className={`w-24 min-h-full bg-linear-to-br ${gradientClasses} flex items-center justify-center shrink-0`}>
-                          <BookOpen className="w-8 h-8 text-white opacity-50" />
+                        {/* Cover / Gradient Sidebar */}
+                        <div className={`w-24 min-h-full bg-linear-to-br ${gradientClasses} flex items-center justify-center shrink-0 overflow-hidden`}>
+                          {manuscript.picture ? (
+                            <img
+                              src={manuscript.picture}
+                              alt={manuscript.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <BookOpen className="w-8 h-8 text-white opacity-50" />
+                          )}
                         </div>
 
                         {/* Content */}
@@ -338,6 +381,8 @@ export const Dashboard: React.FC = () => {
                           <CardMenu
                             onView={() => handleViewChapter(chapter.id_chapter)}
                             onEdit={() => handleEditChapter(chapter.id_chapter)}
+                            onEditInEditor={() => handleEditChapterInEditor(chapter.id_chapter)}
+                            onDelete={() => handleDeleteChapter(chapter.id_chapter, chapter.name_chapter)}
                             itemType="chapter"
                           />
                         </div>
@@ -422,6 +467,15 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
+      <DeleteConfirmModal
+        itemTitle={chapterToDelete?.name ?? ''}
+        itemType="chapter"
+        isOpen={!!chapterToDelete}
+        isDeleting={isDeletingChapter}
+        onConfirm={handleConfirmDeleteChapter}
+        onCancel={handleCancelDeleteChapter}
+        message="This action cannot be undone. This chapter will be deleted permanently."
+      />
     </>
   )
 }
