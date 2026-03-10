@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, FileText, BookOpen, ExternalLink } from 'lucide-react'
-import { useReturnNavigation } from '@/hooks/useReturnNavigation'
-import { useToast } from '@/hooks/useToast'
-import { useChapters } from '@/hooks/useChapters'
-import { useManuscripts } from '@/hooks/useManuscripts'
-import type { ChapterRow } from '@/lib/respository/chaptersRepository'
+import { useReturnNavigation } from '@/hooks/navigation/useReturnNavigation'
+import { useToast } from '@/hooks/ui/useToast'
+import { useChapters } from '@/hooks/data/useChapters'
+import { useManuscripts } from '@/hooks/data/useManuscripts'
+import { useCharacters } from '@/hooks/data/useCharacters'
+import type { ChapterRow } from '@/lib/repository/chaptersRepository'
 import { SkeletonLoader } from '@/components/common/skeletonLoader/SkeletonLoader'
 import { ErrorState } from '@/components/common/errorState/ErrorState'
 import { DeleteConfirmModal } from '@/components/common/deleteConfirmModal/DeleteConfirmModal'
 import { CardMenu } from '@/components/common/cardMenu/CardMenu'
 import { formatDate, formatWordCount } from '@/utils/formatters'
+import { ChapterCharactersSection } from '@/components/chapters/ChapterCharactersSection'
 
 export const ChapterDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -27,6 +29,7 @@ export const ChapterDetailPage: React.FC = () => {
   } = useChapters()
 
   const { manuscripts } = useManuscripts()
+  const { characters: manuscriptCharacters, fetchCharactersByManuscriptId } = useCharacters()
 
   const [chapter, setChapter] = useState<ChapterRow | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -49,15 +52,23 @@ export const ChapterDetailPage: React.FC = () => {
       const data = await fetchChapterById(chapterId)
       if (data) {
         setChapter(data)
+        if (data.id_manuscript) {
+          void fetchCharactersByManuscriptId(data.id_manuscript)
+        }
       }
     }
 
     void loadChapter()
-  }, [id, navigate, returnTo, fetchChapterById])
+  }, [id, navigate, returnTo, fetchChapterById, fetchCharactersByManuscriptId])
 
   const handleEdit = () => {
     if (!id) return
     navigate(`/chapters/edit/${id}?from=detail`)
+  }
+
+  const handleEditInEditor = () => {
+    if (!id) return
+    navigate(`/editor?chapter=${id}`)
   }
 
   const handleDelete = () => {
@@ -166,6 +177,7 @@ export const ChapterDetailPage: React.FC = () => {
           </div>
           <CardMenu
             onEdit={handleEdit}
+            onEditInEditor={handleEditInEditor}
             onDelete={handleDelete}
             itemType="chapter"
           />
@@ -242,6 +254,16 @@ export const ChapterDetailPage: React.FC = () => {
                 </button>
               );
             })()}
+          </div>
+        )}
+
+        {/* Characters in chapter */}
+        {chapter.id_manuscript && (
+          <div className="mb-6">
+            <ChapterCharactersSection
+              chapterId={chapter.id_chapter}
+              manuscriptCharacters={manuscriptCharacters}
+            />
           </div>
         )}
 
