@@ -15,11 +15,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [verificationPending, setVerificationPending] = useState(false)
   const navigate = useNavigate()
   
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setError(null)
+    setVerificationPending(false)
     setLoading(true)
 
     if (password !== confirmPassword) {
@@ -29,11 +31,16 @@ export const RegisterForm: React.FC<RegisterFormProps> = () => {
     }
 
     try {
-      const { error } = await supabase.auth.signUp({ email, password })
-      if (error) throw error
-      navigate('/')
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Error registering user')
+      const { data, error: signUpError } = await supabase.auth.signUp({ email, password })
+      if (signUpError) throw signUpError
+      // If session is null but user exists, email confirmation is required
+      if (data.user && !data.session) {
+        setVerificationPending(true)
+      } else {
+        navigate('/')
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error registering user')
     } finally {
       setLoading(false)
     }
@@ -50,8 +57,23 @@ export const RegisterForm: React.FC<RegisterFormProps> = () => {
 
         {/* Register Form */}
         <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-slate-700">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">Create Account</h2>
-          
+          {verificationPending ? (
+            <div className="space-y-6">
+              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
+                <p className="text-emerald-400 text-center">
+                  Check your email to verify your account. Click the link in the message we sent to <strong className="text-white">{email}</strong>.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/login')}
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+              >
+                Go to Login
+              </button>
+            </div>
+          ) : (
+          <>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
@@ -157,6 +179,8 @@ export const RegisterForm: React.FC<RegisterFormProps> = () => {
               </button>
             </p>
           </div>
+          </>
+          )}
         </div>
       </div>
     </div>
