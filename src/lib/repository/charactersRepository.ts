@@ -33,11 +33,17 @@ export async function getAllCharacters() {
   const manuscriptIds = (manuscripts ?? [])
     .map((m: { id_manuscript: number | null }) => m.id_manuscript)
     .filter((id: number | null | undefined): id is number => id != null);
-  if (manuscriptIds.length === 0) return { data: [], error: null };
-  return await supabase
-    .from(TABLE)
-    .select()
-    .in("id_manuscript", manuscriptIds);
+
+  const base = supabase.from(TABLE).select();
+
+  // Personajes ligados a tus manuscritos + personajes sin manuscrito (RLS acota el resto).
+  if (manuscriptIds.length === 0) {
+    return await base.is("id_manuscript", null);
+  }
+
+  return await base.or(
+    `id_manuscript.in.(${manuscriptIds.join(",")}),id_manuscript.is.null`,
+  );
 }
 
 export async function getCharacterById(id: number) {
@@ -49,7 +55,9 @@ export async function getCharacterById(id: number) {
     .eq("id_character", id)
     .single();
   if (error || !character) return { data: null, error };
-  if (character.id_manuscript == null) return { data: null, error: { message: "Not found" } as Error };
+  if (character.id_manuscript == null) {
+    return { data: character, error: null };
+  }
   const { data: manuscript } = await supabase
     .from("manuscript")
     .select("id_user")
