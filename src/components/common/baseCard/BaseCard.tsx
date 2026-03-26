@@ -30,10 +30,10 @@ export const BaseCard: React.FC<BaseCardProps> = ({
   }
 
   const baseClasses =
-    `group bg-slate-800 border border-slate-700 rounded-xl ${hoverColor} transition-all duration-300 shadow-lg`
+    `group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl ${hoverColor} transition-all duration-300 shadow-lg`
 
   const interactiveClasses = isClickable
-    ? `cursor-pointer focus-within:ring-2 ${focusRingColor} focus-within:ring-offset-2 focus-within:ring-offset-slate-900`
+    ? `cursor-pointer focus-within:ring-2 ${focusRingColor} focus-within:ring-offset-2 focus-within:ring-offset-slate-100 dark:focus-within:ring-offset-slate-900`
     : ''
 
   return (

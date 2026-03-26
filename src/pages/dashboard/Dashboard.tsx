@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/ui/useToast'
 const RECENT_ITEMS_COUNT = 3
 
 export const Dashboard: React.FC = () => {
+  const ENABLE_STATS_CACHE = import.meta.env.VITE_ENABLE_STATS_CACHE === 'true'
   const { toast } = useToast()
   const { manuscripts, isLoading: loadingManuscripts } = useManuscripts()
   const { characters, isLoading: loadingCharacters } = useCharacters()
@@ -49,8 +50,9 @@ export const Dashboard: React.FC = () => {
   const dashboardStats = useDashboardStats(manuscripts, characters, chapters, notes, stats)
 
   useEffect(() => {
+    if (!ENABLE_STATS_CACHE) return
     void refreshStats()
-  }, [refreshStats])
+  }, [ENABLE_STATS_CACHE, refreshStats])
 
   const handleDeleteChapter = (id: number, name: string) => {
     setChapterToDelete({ id, name })
@@ -61,7 +63,9 @@ export const Dashboard: React.FC = () => {
     setIsDeletingChapter(true)
     try {
       await removeChapter(chapterToDelete.id)
-      await refreshStats()
+      if (ENABLE_STATS_CACHE) {
+        await refreshStats()
+      }
       toast.success('Chapter deleted successfully')
       setChapterToDelete(null)
     } catch {
@@ -77,12 +81,12 @@ export const Dashboard: React.FC = () => {
 
   return (
     <>
-      <div className="p-6 bg-slate-900 min-h-screen">
+      <div className="p-6 bg-slate-100 dark:bg-slate-900 min-h-screen">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
-            <p className="text-slate-400">Resume of your writing activity</p>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Dashboard</h1>
+            <p className="text-slate-600 dark:text-slate-400">Resume of your writing activity</p>
           </div>
 
           {/* Quick Actions */}
@@ -122,11 +126,11 @@ export const Dashboard: React.FC = () => {
             {dashboardStats.map((stat) => {
               const Icon = stat.icon
               return (
-                <div key={stat.title} className={`${stat.bgColor} rounded-xl p-6 border border-slate-700`}>
+                <div key={stat.title} className={`${stat.bgColor} rounded-xl p-6 border border-slate-200/60 dark:border-slate-700`}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-slate-400 text-sm font-medium">{stat.title}</p>
-                      <p className="text-2xl font-bold text-white mt-1">
+                      <p className="text-slate-600 dark:text-slate-400 text-sm font-medium">{stat.title}</p>
+                      <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
                         {loadingManuscripts || loadingCharacters || loadingChapters || loadingNotes ? (
                           <StatValueSkeleton />
                         ) : (
@@ -135,7 +139,7 @@ export const Dashboard: React.FC = () => {
                       </p>
                     </div>
                     <div className={`p-3 rounded-lg bg-linear-to-r ${stat.color}`}>
-                      <Icon className="w-6 h-6 text-white" />
+                      <Icon className="w-6 h-6 text-slate-800 dark:text-white" />
                     </div>
                   </div>
                 </div>
@@ -148,10 +152,10 @@ export const Dashboard: React.FC = () => {
             {/* Recent Manuscripts */}
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-white font-bold text-lg">Recent Manuscripts</h2>
+                <h2 className="text-slate-900 dark:text-white font-bold text-lg">Recent Manuscripts</h2>
                 <button
                   onClick={handleViewAllManuscripts}
-                  className="text-xs text-purple-500 hover:text-white transition-colors flex items-center gap-1"
+                  className="text-xs text-purple-600 hover:text-purple-800 dark:text-purple-500 dark:hover:text-white transition-colors flex items-center gap-1"
                   aria-label="View all manuscripts"
                 >
                   View all <ArrowRight className="w-3 h-3" />
@@ -168,7 +172,7 @@ export const Dashboard: React.FC = () => {
                     return (
                       <div
                         key={manuscript.id_manuscript}
-                        className="group relative flex bg-slate-800 border border-slate-700 rounded-xl overflow-hidden hover:border-purple-500 transition-all duration-300 cursor-pointer min-h-[140px] shadow-lg focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 focus-within:ring-offset-slate-900"
+                        className="group relative flex bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:border-purple-500 transition-all duration-300 cursor-pointer min-h-[140px] shadow-lg focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-offset-2 focus-within:ring-offset-slate-100 dark:focus-within:ring-offset-slate-900"
                         onClick={() => handleViewManuscript(manuscript.id_manuscript)}
                         role="button"
                         tabIndex={0}
@@ -199,16 +203,16 @@ export const Dashboard: React.FC = () => {
                             <div>
                               <StatusBadge status={manuscript.status} size="sm" />
                             </div>
-                            <h3 className="text-white font-bold text-lg leading-tight line-clamp-2">
+                            <h3 className="text-slate-900 dark:text-white font-bold text-lg leading-tight line-clamp-2">
                               {manuscript.title}
                             </h3>
                             {manuscript.genre && (
-                              <p className="text-slate-400 text-xs mt-0.5">{manuscript.genre}</p>
+                              <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{manuscript.genre}</p>
                             )}
                           </div>
 
                           <div className="w-full mt-auto">
-                            <div className="flex justify-between text-xs text-slate-400 mb-1.5">
+                            <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400 mb-1.5">
                               <span>{formatWordCountNumber(manuscript.word_count ?? 0)} words</span>
                               <span>{Math.round(progress)}%</span>
                             </div>
@@ -241,10 +245,10 @@ export const Dashboard: React.FC = () => {
             {/* Main Characters */}
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-white font-bold text-lg">Main Characters</h2>
+                <h2 className="text-slate-900 dark:text-white font-bold text-lg">Main Characters</h2>
                 <button
                   onClick={handleViewAllCharacters}
-                  className="text-xs text-purple-500 hover:text-white transition-colors flex items-center gap-1"
+                  className="text-xs text-purple-600 hover:text-purple-800 dark:text-purple-500 dark:hover:text-white transition-colors flex items-center gap-1"
                   aria-label="View all characters"
                 >
                   View all <ArrowRight className="w-3 h-3" />
@@ -260,7 +264,7 @@ export const Dashboard: React.FC = () => {
                     return (
                       <div
                         key={character.id_character}
-                        className="group flex items-center justify-between bg-slate-800 border border-slate-700 p-4 rounded-xl hover:border-emerald-500 transition-all cursor-pointer"
+                        className="group flex items-center justify-between bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-emerald-500 transition-all cursor-pointer"
                         onClick={() => handleViewCharacter(character.id_character)}
                         role="button"
                         tabIndex={0}
@@ -274,7 +278,7 @@ export const Dashboard: React.FC = () => {
                       >
                         <div className="flex items-center gap-4">
                           {/* Avatar */}
-                          <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-base font-bold text-white border-2 border-slate-800 shadow-sm">
+                          <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-base font-bold text-slate-800 dark:text-white border-2 border-slate-300 dark:border-slate-800 shadow-sm">
                             {character.picture ? (
                               <img
                                 src={character.picture}
@@ -288,7 +292,7 @@ export const Dashboard: React.FC = () => {
 
                           {/* Content */}
                           <div>
-                            <h4 className="text-white font-semibold text-base">{character.name}</h4>
+                            <h4 className="text-slate-900 dark:text-white font-semibold text-base">{character.name}</h4>
                             <div className="flex items-center gap-2 mt-0.5">
                               {character.role && (
                                 <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/20 text-emerald-500 border border-emerald-500/30">
@@ -322,10 +326,10 @@ export const Dashboard: React.FC = () => {
             {/* Recent Chapters */}
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-white font-bold text-lg">Recent Chapters</h2>
+                <h2 className="text-slate-900 dark:text-white font-bold text-lg">Recent Chapters</h2>
                 <button
                   onClick={handleViewAllChapters}
-                  className="text-xs text-purple-500 hover:text-white transition-colors flex items-center gap-1"
+                  className="text-xs text-purple-600 hover:text-purple-800 dark:text-purple-500 dark:hover:text-white transition-colors flex items-center gap-1"
                   aria-label="View all chapters"
                 >
                   View all <ArrowRight className="w-3 h-3" />
@@ -346,7 +350,7 @@ export const Dashboard: React.FC = () => {
                     return (
                       <div
                         key={chapter.id_chapter}
-                        className="group relative flex items-center justify-between bg-slate-800 border border-slate-700 p-4 rounded-xl hover:border-purple-500 transition-all"
+                        className="group relative flex items-center justify-between bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-purple-500 transition-all"
                       >
                         <div
                           className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
@@ -365,13 +369,13 @@ export const Dashboard: React.FC = () => {
                             <ScrollText className="w-5 h-5 text-purple-400" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-white font-semibold text-sm truncate">{chapter.name_chapter}</h4>
+                            <h4 className="text-slate-900 dark:text-white font-semibold text-sm truncate">{chapter.name_chapter}</h4>
                             <div className="flex items-center gap-2 mt-0.5">
-                              <p className="text-slate-400 text-xs">{chapterLabel}</p>
+                              <p className="text-slate-600 dark:text-slate-400 text-xs">{chapterLabel}</p>
                               {relatedManuscript && (
                                 <>
                                   <span className="text-slate-600 text-xs">•</span>
-                                  <p className="text-slate-400 text-xs truncate">{relatedManuscript.title}</p>
+                                  <p className="text-slate-600 dark:text-slate-400 text-xs truncate">{relatedManuscript.title}</p>
                                 </>
                               )}
                             </div>
@@ -407,10 +411,10 @@ export const Dashboard: React.FC = () => {
             {/* Recent Notes */}
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between mb-2">
-                <h2 className="text-white font-bold text-lg">Recent Notes</h2>
+                <h2 className="text-slate-900 dark:text-white font-bold text-lg">Recent Notes</h2>
                 <button
                   onClick={handleViewAllNotes}
-                  className="text-xs text-purple-500 hover:text-white transition-colors flex items-center gap-1"
+                  className="text-xs text-purple-600 hover:text-purple-800 dark:text-purple-500 dark:hover:text-white transition-colors flex items-center gap-1"
                   aria-label="View all notes"
                 >
                   View all <ArrowRight className="w-3 h-3" />
@@ -424,7 +428,7 @@ export const Dashboard: React.FC = () => {
                   {notes.slice(0, RECENT_ITEMS_COUNT).map((note) => (
                     <div
                       key={note.id_note}
-                      className="group flex items-center justify-between bg-slate-800 border border-slate-700 p-4 rounded-xl hover:border-cyan-500 transition-all cursor-pointer"
+                      className="group flex items-center justify-between bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl hover:border-cyan-500 transition-all cursor-pointer"
                       onClick={() => handleViewNote(note.id_note)}
                       role="button"
                       tabIndex={0}
@@ -441,9 +445,9 @@ export const Dashboard: React.FC = () => {
                           <FileText className="w-5 h-5 text-cyan-400" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-semibold text-sm truncate">{note.title}</h4>
+                          <h4 className="text-slate-900 dark:text-white font-semibold text-sm truncate">{note.title}</h4>
                           {note.date_created && (
-                            <p className="text-slate-400 text-xs mt-0.5">{formatDate(note.date_created)}</p>
+                            <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{formatDate(note.date_created)}</p>
                           )}
                         </div>
                       </div>

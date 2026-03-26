@@ -21,8 +21,8 @@ export const NoteForm: React.FC<NoteFormProps> = ({
   const { manuscripts, isLoading: isLoadingManuscripts } = useManuscripts();
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-slate-800 rounded-xl border border-slate-700 shadow-sm">
-      <h2 className="text-2xl font-bold text-white mb-6">
+    <div className="max-w-3xl mx-auto p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
         {initialDataForm ? 'Edit Note' : 'New Note'}
       </h2>
 
@@ -35,7 +35,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
 
         {/* Title */}
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="title" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Title *
           </label>
           <input
@@ -46,7 +46,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
             onChange={handleInputChange}
             onBlur={handleBlur}
             required
-            className={`w-full mt-1 px-4 py-2 bg-slate-700/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.title && touchedFields.has('title')
+            className={`w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.title && touchedFields.has('title')
                 ? 'border-red-500 focus:ring-red-500'
                 : 'border-slate-600 focus:ring-blue-500'
               }`}
@@ -58,7 +58,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
 
         {/* Content */}
         <div>
-          <label htmlFor="content" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="content" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Content
           </label>
           <textarea
@@ -68,7 +68,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
             onChange={handleInputChange}
             onBlur={handleBlur}
             rows={8}
-            className={`w-full mt-1 px-4 py-2 bg-slate-700/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.content && touchedFields.has('content')
+            className={`w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.content && touchedFields.has('content')
                 ? 'border-red-500 focus:ring-red-500'
                 : 'border-slate-600 focus:ring-blue-500'
               }`}
@@ -77,7 +77,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
           {fieldErrors.content && touchedFields.has('content') && (
             <p className="mt-1 text-sm text-red-400">{fieldErrors.content}</p>
           )}
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
             {formData.content?.length || 0} / 10000 characters
           </p>
         </div>
@@ -86,7 +86,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Category */}
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="category" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               Category
             </label>
             <input
@@ -97,9 +97,9 @@ export const NoteForm: React.FC<NoteFormProps> = ({
               onChange={handleInputChange}
               onBlur={handleBlur}
               placeholder="e.g., Plot, Character, World-building"
-              className={`w-full mt-1 px-4 py-2 bg-slate-700/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.category && touchedFields.has('category')
+              className={`w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.category && touchedFields.has('category')
                   ? 'border-red-500 focus:ring-red-500'
-                  : 'border-slate-600 focus:ring-blue-500'
+                  : 'border-slate-200 dark:border-slate-600 focus:ring-blue-500'
                 }`}
             />
             {fieldErrors.category && touchedFields.has('category') && (
@@ -109,7 +109,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
 
           {/* Priority */}
           <div>
-            <label htmlFor="priority" className="block text-sm font-medium text-slate-300">
+            <label htmlFor="priority" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
               Priority
             </label>
             <select
@@ -117,7 +117,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
               name="priority"
               value={formData.priority ?? ''}
               onChange={handleInputChange}
-              className="w-full mt-1 px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">None</option>
               <option value="Low">Low</option>
@@ -129,7 +129,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
 
         {/* Related Manuscript */}
         <div>
-          <label htmlFor="id_manuscript" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="id_manuscript" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Related Manuscript
           </label>
           <select
@@ -137,7 +137,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
             name="id_manuscript"
             value={formData.id_manuscript ?? ''}
             onChange={handleInputChange}
-            className="w-full mt-1 px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">None</option>
             {isLoadingManuscripts ? (
@@ -157,7 +157,7 @@ export const NoteForm: React.FC<NoteFormProps> = ({
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-medium rounded-lg transition-colors"
           >
             Cancel
           </button>

@@ -122,16 +122,16 @@ export const CharacterDetailPage: React.FC = () => {
   if (!character) {
     return (
       <div className="p-6">
-        <div className="flex flex-col items-center justify-center h-64 bg-slate-800 rounded-xl border border-slate-700 p-8">
-          <h3 className="text-xl font-semibold text-white mb-2">
+        <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
             Character not found
           </h3>
-          <p className="text-slate-400 text-sm text-center mb-4">
+          <p className="text-slate-600 dark:text-slate-400 text-sm text-center mb-4">
             The character you're looking for doesn't exist or has been deleted.
           </p>
           <button
             onClick={() => navigate(returnTo)}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 dark:text-white font-medium rounded-lg transition-colors"
           >
             Go back
           </button>
@@ -150,12 +150,12 @@ export const CharacterDetailPage: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(returnTo)}
-              className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <h1 className="text-3xl font-bold text-white">{character.name}</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{character.name}</h1>
           </div>
           <CardMenu
             onEdit={handleEdit}
@@ -165,9 +165,9 @@ export const CharacterDetailPage: React.FC = () => {
         </div>
 
         {/* Main info */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
           <div className="flex items-start gap-6">
-            <div className="w-20 h-20 rounded-full bg-slate-700 flex items-center justify-center text-2xl font-bold text-white border-2 border-slate-600 shrink-0">
+            <div className="w-20 h-20 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-2xl font-bold text-slate-800 dark:text-white border-2 border-slate-300 dark:border-slate-600 shrink-0">
               {character.picture ? (
                 <img
                   src={character.picture}
@@ -182,36 +182,36 @@ export const CharacterDetailPage: React.FC = () => {
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
               {character.role && (
                 <div>
-                  <p className="text-slate-400 text-sm">Role</p>
-                  <p className="text-white font-medium">{character.role}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Role</p>
+                  <p className="text-slate-900 dark:text-white font-medium">{character.role}</p>
                 </div>
               )}
               {character.age !== null && character.age !== undefined && (
                 <div>
-                  <p className="text-slate-400 text-sm">Age</p>
-                  <p className="text-white font-medium">{character.age}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Age</p>
+                  <p className="text-slate-900 dark:text-white font-medium">{character.age}</p>
                 </div>
               )}
               {character.occupation && (
                 <div>
-                  <p className="text-slate-400 text-sm">Occupation</p>
-                  <p className="text-white font-medium">
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Occupation</p>
+                  <p className="text-slate-900 dark:text-white font-medium">
                     {character.occupation}
                   </p>
                 </div>
               )}
               {character.relationship_status && (
                 <div>
-                  <p className="text-slate-400 text-sm">Relationship status</p>
-                  <p className="text-white font-medium">
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Relationship status</p>
+                  <p className="text-slate-900 dark:text-white font-medium">
                     {character.relationship_status}
                   </p>
                 </div>
               )}
               {character.birth && (
                 <div className="md:col-span-2">
-                  <p className="text-slate-400 text-sm">Birth</p>
-                  <p className="text-white font-medium">{character.birth}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Birth</p>
+                  <p className="text-slate-900 dark:text-white font-medium">{character.birth}</p>
                 </div>
               )}
             </div>
@@ -219,90 +219,90 @@ export const CharacterDetailPage: React.FC = () => {
         </div>
 
         {/* Physical description */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
             Physical Description
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {character.height && (
               <div>
-                <p className="text-slate-400 text-sm">Height</p>
-                <p className="text-white">{character.height}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Height</p>
+                <p className="text-slate-900 dark:text-white">{character.height}</p>
               </div>
             )}
             {character.weight && (
               <div>
-                <p className="text-slate-400 text-sm">Weight</p>
-                <p className="text-white">{character.weight}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Weight</p>
+                <p className="text-slate-900 dark:text-white">{character.weight}</p>
               </div>
             )}
             {character.build && (
               <div>
-                <p className="text-slate-400 text-sm">Build</p>
-                <p className="text-white">{character.build}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Build</p>
+                <p className="text-slate-900 dark:text-white">{character.build}</p>
               </div>
             )}
             {character.hair_color && (
               <div>
-                <p className="text-slate-400 text-sm">Hair color</p>
-                <p className="text-white">{character.hair_color}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Hair color</p>
+                <p className="text-slate-900 dark:text-white">{character.hair_color}</p>
               </div>
             )}
             {character.hair_style && (
               <div>
-                <p className="text-slate-400 text-sm">Hair style</p>
-                <p className="text-white">{character.hair_style}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Hair style</p>
+                <p className="text-slate-900 dark:text-white">{character.hair_style}</p>
               </div>
             )}
             {character.eye_color && (
               <div>
-                <p className="text-slate-400 text-sm">Eye color</p>
-                <p className="text-white">{character.eye_color}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Eye color</p>
+                <p className="text-slate-900 dark:text-white">{character.eye_color}</p>
               </div>
             )}
             {character.eye_shape && (
               <div>
-                <p className="text-slate-400 text-sm">Eye shape</p>
-                <p className="text-white">{character.eye_shape}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Eye shape</p>
+                <p className="text-slate-900 dark:text-white">{character.eye_shape}</p>
               </div>
             )}
             {character.scars && (
               <div className="md:col-span-2">
-                <p className="text-slate-400 text-sm">Scars / Marks</p>
-                <p className="text-white">{character.scars}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Scars / Marks</p>
+                <p className="text-slate-900 dark:text-white">{character.scars}</p>
               </div>
             )}
           </div>
         </div>
 
         {/* Personality & traits */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
             Personality & Traits
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {character.positive_traits && (
               <div>
-                <p className="text-slate-400 text-sm">Positive traits</p>
-                <p className="text-white">{character.positive_traits}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Positive traits</p>
+                <p className="text-slate-900 dark:text-white">{character.positive_traits}</p>
               </div>
             )}
             {character.negative_traits && (
               <div>
-                <p className="text-slate-400 text-sm">Negative traits</p>
-                <p className="text-white">{character.negative_traits}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Negative traits</p>
+                <p className="text-slate-900 dark:text-white">{character.negative_traits}</p>
               </div>
             )}
             {character.personality_type && (
               <div>
-                <p className="text-slate-400 text-sm">Personality type</p>
-                <p className="text-white">{character.personality_type}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Personality type</p>
+                <p className="text-slate-900 dark:text-white">{character.personality_type}</p>
               </div>
             )}
             {character.quirks_mannerisms && (
               <div className="md:col-span-2">
-                <p className="text-slate-400 text-sm">Quirks & mannerisms</p>
-                <p className="text-white whitespace-pre-wrap">
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Quirks & mannerisms</p>
+                <p className="text-slate-900 dark:text-white whitespace-pre-wrap">
                   {character.quirks_mannerisms}
                 </p>
               </div>
@@ -311,47 +311,47 @@ export const CharacterDetailPage: React.FC = () => {
         </div>
 
         {/* Motivations & flaws */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">
             Motivations & Flaws
           </h2>
           <div className="space-y-4">
             {character.external_motivation && (
               <div>
-                <p className="text-slate-400 text-sm">External motivation</p>
-                <p className="text-white whitespace-pre-wrap">
+                <p className="text-slate-600 dark:text-slate-400 text-sm">External motivation</p>
+                <p className="text-slate-900 dark:text-white whitespace-pre-wrap">
                   {character.external_motivation}
                 </p>
               </div>
             )}
             {character.internal_motivation && (
               <div>
-                <p className="text-slate-400 text-sm">Internal motivation</p>
-                <p className="text-white whitespace-pre-wrap">
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Internal motivation</p>
+                <p className="text-slate-900 dark:text-white whitespace-pre-wrap">
                   {character.internal_motivation}
                 </p>
               </div>
             )}
             {character.flaw && (
               <div>
-                <p className="text-slate-400 text-sm">Fatal flaw</p>
-                <p className="text-white whitespace-pre-wrap">
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Fatal flaw</p>
+                <p className="text-slate-900 dark:text-white whitespace-pre-wrap">
                   {character.flaw}
                 </p>
               </div>
             )}
             {character.fears_phobias && (
               <div>
-                <p className="text-slate-400 text-sm">Fears & phobias</p>
-                <p className="text-white whitespace-pre-wrap">
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Fears & phobias</p>
+                <p className="text-slate-900 dark:text-white whitespace-pre-wrap">
                   {character.fears_phobias}
                 </p>
               </div>
             )}
             {character.motto && (
               <div>
-                <p className="text-slate-400 text-sm">Motto / Catchphrase</p>
-                <p className="text-white">{character.motto}</p>
+                <p className="text-slate-600 dark:text-slate-400 text-sm">Motto / Catchphrase</p>
+                <p className="text-slate-900 dark:text-white">{character.motto}</p>
               </div>
             )}
           </div>
@@ -359,8 +359,8 @@ export const CharacterDetailPage: React.FC = () => {
 
         {/* Related Manuscript */}
         {character.id_manuscript && (
-          <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
-            <h2 className="text-xl font-semibold text-white mb-4">Related Manuscript</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Related Manuscript</h2>
             {(() => {
               const relatedManuscript = manuscripts?.find((m) => m.id_manuscript === character.id_manuscript);
               if (!relatedManuscript) {
@@ -369,17 +369,17 @@ export const CharacterDetailPage: React.FC = () => {
               return (
                 <button
                   onClick={() => navigate(`/manuscripts/${relatedManuscript.id_manuscript}?from=character-detail`)}
-                  className="flex items-center gap-3 p-4 bg-slate-700/50 hover:bg-slate-700 rounded-lg transition-colors w-full text-left group"
+                  className="flex items-center gap-3 p-4 bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors w-full text-left group"
                 >
                   <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center shrink-0">
                     <BookOpen className="w-6 h-6 text-purple-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-semibold group-hover:text-purple-400 transition-colors truncate">
+                    <h3 className="text-slate-900 dark:text-white font-semibold group-hover:text-purple-400 transition-colors truncate">
                       {relatedManuscript.title}
                     </h3>
                     {relatedManuscript.genre && (
-                      <p className="text-slate-400 text-sm mt-1">{relatedManuscript.genre}</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">{relatedManuscript.genre}</p>
                     )}
                   </div>
                   <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-purple-400 transition-colors shrink-0" />
@@ -390,10 +390,10 @@ export const CharacterDetailPage: React.FC = () => {
         )}
 
         {/* Biography */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
-          <h2 className="text-xl font-semibold text-white mb-4">Biography</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Biography</h2>
           {character.biography ? (
-            <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
               {character.biography}
             </p>
           ) : (

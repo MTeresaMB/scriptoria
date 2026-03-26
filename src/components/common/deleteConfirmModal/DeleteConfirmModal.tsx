@@ -25,18 +25,18 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 max-w-md mx-4">
-        <h3 className="text-lg font-semibold text-white mb-2">
+      <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 max-w-md mx-4">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
           {title}
         </h3>
-        <p className="text-slate-400 mb-4">
+        <p className="text-slate-600 dark:text-slate-400 mb-4">
           {displayMessage}
         </p>
         <div className="flex items-center justify-end space-x-3">
           <button
             onClick={onCancel}
             disabled={isDeleting}
-            className="px-4 py-2 text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors disabled:opacity-50"
           >
             Cancel
           </button>

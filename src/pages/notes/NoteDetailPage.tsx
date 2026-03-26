@@ -139,16 +139,16 @@ export const NoteDetailPage: React.FC = () => {
   if (!note) {
     return (
       <div className="p-6">
-        <div className="flex flex-col items-center justify-center h-64 bg-slate-800 rounded-xl border border-slate-700 p-8">
-          <h3 className="text-xl font-semibold text-white mb-2">
+        <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
             Note not found
           </h3>
-          <p className="text-slate-400 text-sm text-center mb-4">
+          <p className="text-slate-600 dark:text-slate-400 text-sm text-center mb-4">
             The note you're looking for doesn't exist or has been deleted.
           </p>
           <button
             onClick={() => navigate(returnTo)}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 dark:text-white font-medium rounded-lg transition-colors"
           >
             Go back
           </button>
@@ -165,7 +165,7 @@ export const NoteDetailPage: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(returnTo)}
-              className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -180,7 +180,7 @@ export const NoteDetailPage: React.FC = () => {
         </div>
 
         {/* Main info */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
           <div className="flex items-start gap-6">
             <div className="w-16 h-16 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0">
               <FileText className="w-8 h-8 text-blue-400" />
@@ -189,18 +189,18 @@ export const NoteDetailPage: React.FC = () => {
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
               {note.category && (
                 <div className="flex items-center gap-2">
-                  <Tag className="w-4 h-4 text-slate-400" />
+                  <Tag className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                   <div>
-                    <p className="text-slate-400 text-sm">Category</p>
-                    <p className="text-white font-medium">{note.category}</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">Category</p>
+                    <p className="text-slate-900 dark:text-white font-medium">{note.category}</p>
                   </div>
                 </div>
               )}
               {note.priority && (
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 text-slate-400" />
+                  <AlertCircle className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                   <div>
-                    <p className="text-slate-400 text-sm">Priority</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">Priority</p>
                     <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium border ${getPriorityColor(note.priority)}`}>
                       {note.priority}
                     </span>
@@ -209,19 +209,19 @@ export const NoteDetailPage: React.FC = () => {
               )}
               {note.date_created && (
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-slate-400" />
+                  <Calendar className="w-4 h-4 text-slate-600 dark:text-slate-400" />
                   <div>
-                    <p className="text-slate-400 text-sm">Created</p>
-                    <p className="text-white font-medium">{formatDate(note.date_created)}</p>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm">Created</p>
+                    <p className="text-slate-900 dark:text-white font-medium">{formatDate(note.date_created)}</p>
                   </div>
                 </div>
               )}
               {note.id_manuscript && manuscriptTitle && (
                 <div>
-                  <p className="text-slate-400 text-sm mb-2">Related Manuscript</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-2">Related Manuscript</p>
                   <button
                     onClick={() => navigate(`/manuscripts/${note.id_manuscript}?from=note-detail`)}
-                    className="flex items-center gap-2 text-white font-medium hover:text-purple-400 transition-colors group"
+                    className="flex items-center gap-2 text-slate-900 dark:text-white font-medium hover:text-purple-400 transition-colors group"
                   >
                     <BookOpen className="w-4 h-4" />
                     <span>{manuscriptTitle}</span>
@@ -234,10 +234,10 @@ export const NoteDetailPage: React.FC = () => {
         </div>
 
         {/* Content */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
-          <h2 className="text-xl font-semibold text-white mb-4">Content</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Content</h2>
           {note.content ? (
-            <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
               {note.content}
             </p>
           ) : (

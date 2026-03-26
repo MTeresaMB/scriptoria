@@ -11,7 +11,7 @@ export interface StatusColors {
 
 const statusColorMap: Record<string, StatusColors> = {
   'completed': {
-    badge: 'bg-green-500/20 text-green-400 border-green-500/30',
+    badge: 'bg-green-500/15 dark:bg-green-500/20 text-green-800 dark:text-green-400 border-green-600/25 dark:border-green-500/30',
     gradient: {
       from: 'from-purple-900',
       to: 'to-indigo-900',
@@ -19,7 +19,7 @@ const statusColorMap: Record<string, StatusColors> = {
     progress: 'bg-purple-500',
   },
   'draft': {
-    badge: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+    badge: 'bg-amber-500/15 dark:bg-yellow-500/20 text-amber-900 dark:text-yellow-400 border-amber-600/30 dark:border-yellow-500/30',
     gradient: {
       from: 'from-blue-900',
       to: 'to-cyan-900',
@@ -27,7 +27,7 @@ const statusColorMap: Record<string, StatusColors> = {
     progress: 'bg-yellow-500',
   },
   'in progress': {
-    badge: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+    badge: 'bg-blue-500/15 dark:bg-blue-500/20 text-blue-800 dark:text-blue-400 border-blue-600/30 dark:border-blue-500/30',
     gradient: {
       from: 'from-blue-900',
       to: 'to-cyan-900',

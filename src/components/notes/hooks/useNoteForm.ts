@@ -3,7 +3,14 @@ import type { FormEvent } from 'react';
 import { supabase } from '@/lib/supabase';
 import { insertNote, updateNote, type NoteInsert, type NoteUpdate } from '@/lib/repository/notesRepository';
 import { useToast } from '@/hooks/ui/useToast';
-import { validateRequired, validateMinLength, validateMaxLength } from '@/utils/validations';
+import {
+  composeValidators,
+  updateFieldErrors,
+  validateMaxLength,
+  validateMinLength,
+  validateRequired,
+  type ValidationResult,
+} from '@/utils/validations';
 import { useUnsavedChanges } from '@/hooks/ui/useUnsavedChanges';
 import { cleanOptionalField } from '@/utils/formHelpers';
 import type { Note } from '@/types';
@@ -13,9 +20,9 @@ interface UseNoteFormProps {
   onSuccess: (data: Note) => void;
 }
 
-type FormFieldName = 'title' | 'content' | 'category';
+type NoteFieldName = 'title' | 'content' | 'category';
 
-const FIELDS_TO_VALIDATE: FormFieldName[] = ['title', 'content', 'category'];
+const FIELDS_TO_VALIDATE: NoteFieldName[] = ['title', 'content', 'category'];
 
 const MAX_LENGTHS = {
   title: 200,
@@ -27,7 +34,7 @@ export const useNoteForm = ({ initialData, onSuccess }: UseNoteFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<NoteFieldName, string>>>({});
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
 
   const [formData, setFormData] = useState<NoteInsert>({
@@ -62,46 +69,43 @@ export const useNoteForm = ({ initialData, onSuccess }: UseNoteFormProps) => {
     message: 'You have unsaved changes. Are you sure you want to leave?',
   });
 
-  const validateField = useCallback((name: string, value: unknown): boolean => {
-    let validation: { isValid: boolean; error?: string } = { isValid: true };
+  const titleValidator = useCallback(
+    (value: string): ValidationResult =>
+      composeValidators<string>(
+        (v) => validateRequired(v, 'Title'),
+        (v) => validateMinLength(v, 2, 'Title'),
+        (v) => validateMaxLength(v, MAX_LENGTHS.title, 'Title'),
+      )(value),
+    [],
+  );
 
-    switch (name) {
-      case 'title': {
-        validation = validateRequired(value as string, 'Title');
-        if (validation.isValid) {
-          validation = validateMinLength(value as string, 2, 'Title');
-        }
-        if (validation.isValid) {
-          validation = validateMaxLength(value as string, MAX_LENGTHS.title, 'Title');
-        }
-        break;
-      }
-      case 'content': {
-        if (value) {
-          validation = validateMaxLength(value as string, MAX_LENGTHS.content, 'Content');
-        }
-        break;
-      }
-      case 'category': {
-        if (value) {
-          validation = validateMaxLength(value as string, MAX_LENGTHS.category, 'Category');
-        }
-        break;
-      }
+  const contentValidator = useCallback(
+    (value: string | null): ValidationResult =>
+      value ? validateMaxLength(value, MAX_LENGTHS.content, 'Content') : { isValid: true },
+    [],
+  );
+
+  const categoryValidator = useCallback(
+    (value: string | null): ValidationResult =>
+      value ? validateMaxLength(value, MAX_LENGTHS.category, 'Category') : { isValid: true },
+    [],
+  );
+
+  const validateField = useCallback((name: string, value: unknown): boolean => {
+    let validation: ValidationResult = { isValid: true };
+
+    if (name === 'title') {
+      validation = titleValidator((value ?? '') as string);
+    } else if (name === 'content') {
+      validation = contentValidator((value as string | null) ?? null);
+    } else if (name === 'category') {
+      validation = categoryValidator((value as string | null) ?? null);
     }
 
-    setFieldErrors(prev => {
-      if (validation.isValid) {
-        const rest = Object.fromEntries(
-          Object.entries(prev).filter(([key]) => key !== name)
-        );
-        return rest;
-      }
-      return { ...prev, [name]: validation.error || 'Invalid value' };
-    });
+    setFieldErrors(prev => updateFieldErrors(prev, name as NoteFieldName, validation));
 
     return validation.isValid;
-  }, []);
+  }, [categoryValidator, contentValidator, titleValidator]);
 
   const handleInputChange = useCallback((
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -188,8 +192,10 @@ export const useNoteForm = ({ initialData, onSuccess }: UseNoteFormProps) => {
         const { data, error } = await insertNote(insertData);
         if (error) throw error;
         if (data) {
+          const created = Array.isArray(data) ? data[0] : data;
+          if (!created) return;
           toast.success('Note created successfully');
-          onSuccess(data[0] as Note);
+          onSuccess(created as Note);
         }
       }
     } catch (err: unknown) {

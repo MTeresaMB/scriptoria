@@ -161,11 +161,11 @@ export const ManuscriptDetailPage: React.FC = () => {
   if (!manuscript) {
     return (
       <div className="p-6">
-        <div className="flex flex-col items-center justify-center h-64 bg-slate-800 rounded-xl border border-slate-700 p-8">
-          <h3 className="text-xl font-semibold text-white mb-2">
+        <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
             Manuscript not found
           </h3>
-          <p className="text-slate-400 text-sm text-center mb-4">
+          <p className="text-slate-600 dark:text-slate-400 text-sm text-center mb-4">
             The manuscript you're looking for doesn't exist or has been deleted.
           </p>
           <button
@@ -187,12 +187,12 @@ export const ManuscriptDetailPage: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(returnTo)}
-              className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <h1 className="text-3xl font-bold text-white">{manuscript.title}</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{manuscript.title}</h1>
           </div>
           <CardMenu
             onEdit={handleEdit}
@@ -201,7 +201,7 @@ export const ManuscriptDetailPage: React.FC = () => {
           />
         </div>
 
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
           <div className="flex items-start gap-6">
             <div className={`w-20 h-20 rounded-xl bg-linear-to-br ${gradientClasses} flex items-center justify-center shrink-0 overflow-hidden`}>
               {manuscript.picture ? (
@@ -222,20 +222,20 @@ export const ManuscriptDetailPage: React.FC = () => {
 
               <div className="space-y-2">
                 {manuscript?.date_created && (
-                  <p className="text-slate-400 text-sm">
-                    <span className="font-medium text-slate-300">Created:</span>{' '}
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    <span className="font-medium text-slate-800 dark:text-slate-300">Created:</span>{' '}
                     {formatDate(manuscript.date_created)}
                   </p>
                 )}
                 {manuscript?.date_updated && (
-                  <p className="text-slate-400 text-sm">
-                    <span className="font-medium text-slate-300">Last edited:</span>{' '}
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    <span className="font-medium text-slate-800 dark:text-slate-300">Last edited:</span>{' '}
                     {formatDate(manuscript?.date_updated)}
                   </p>
                 )}
                 {manuscript?.genre && (
-                  <p className="text-slate-400 text-sm">
-                    <span className="font-medium text-slate-300">Genre:</span>{' '}
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">
+                    <span className="font-medium text-slate-800 dark:text-slate-300">Genre:</span>{' '}
                     {manuscript?.genre}
                   </p>
                 )}
@@ -245,9 +245,9 @@ export const ManuscriptDetailPage: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-            <h3 className="text-sm font-medium text-slate-400 mb-2">Word Count</h3>
-            <p className="text-2xl font-bold text-white">
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+            <h3 className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Word Count</h3>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">
               {formatWordCount(manuscript?.word_count ?? 0)}
             </p>
             <p className="text-xs text-slate-500 mt-1">
@@ -255,10 +255,10 @@ export const ManuscriptDetailPage: React.FC = () => {
             </p>
           </div>
 
-          <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-            <h3 className="text-sm font-medium text-slate-400 mb-2">Progress</h3>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+            <h3 className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Progress</h3>
             <div className="space-y-2">
-              <p className="text-2xl font-bold text-white">{Math.round(progress)}%</p>
+              <p className="text-2xl font-bold text-slate-900 dark:text-white">{Math.round(progress)}%</p>
               <ProgressBar
                 progress={progress}
                 status={manuscript?.status ?? 'draft'}
@@ -269,17 +269,17 @@ export const ManuscriptDetailPage: React.FC = () => {
           </div>
 
           {manuscript?.target_audience && (
-            <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <h3 className="text-sm font-medium text-slate-400 mb-2">Target Audience</h3>
-              <p className="text-xl font-semibold text-white">{manuscript?.target_audience}</p>
+            <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-4">
+              <h3 className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-2">Target Audience</h3>
+              <p className="text-xl font-semibold text-slate-900 dark:text-white">{manuscript?.target_audience}</p>
             </div>
           )}
         </div>
 
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">Summary</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Summary</h2>
           {manuscript?.summary ? (
-            <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
               {manuscript?.summary}
             </p>
           ) : (
@@ -288,9 +288,9 @@ export const ManuscriptDetailPage: React.FC = () => {
         </div>
 
         {/* Related characters */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Characters in this manuscript</h2>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Characters in this manuscript</h2>
           </div>
           {relatedCharacters.length === 0 ? (
             <p className="text-slate-500 text-sm">No characters linked to this manuscript yet.</p>
@@ -298,7 +298,7 @@ export const ManuscriptDetailPage: React.FC = () => {
             <div className="space-y-6">
               {Object.entries(charactersByRole).map(([role, characters]) => (
                 <div key={role}>
-                  <h3 className="text-sm font-semibold text-slate-300 mb-3">
+                  <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-300 mb-3">
                     {role}
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -317,9 +317,9 @@ export const ManuscriptDetailPage: React.FC = () => {
         </div>
 
         {/* Related chapters */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Chapters in this manuscript</h2>
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Chapters in this manuscript</h2>
             <button
               onClick={() => navigate(`/chapters/new?from=manuscript-detail&manuscript=${id}`)}
               className="text-sm text-purple-500 hover:text-purple-400 transition-colors"

@@ -16,7 +16,7 @@ export const GenreSelect: React.FC<GenreSelectProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="w-full mt-1 px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-400">
+      <div className="w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-600 dark:text-slate-400">
         Loading genres...
       </div>
     );
@@ -43,7 +43,7 @@ export const GenreSelect: React.FC<GenreSelectProps> = ({
       name="genre"
       value={value ?? ''}
       onChange={onChange}
-      className="w-full mt-1 px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+      className="w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
     >
       <option value="">Select genre</option>
       {genres.length === 0 ? (

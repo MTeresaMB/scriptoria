@@ -51,23 +51,23 @@ export const ChapterCard: React.FC<ChapterCardProps> = memo(({
       >
         <div className="flex-1 min-w-0 pr-10">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-medium text-purple-300 uppercase tracking-wide">
+            <span className="text-xs font-medium text-purple-700 dark:text-purple-300 uppercase tracking-wide">
               {chapterLabel}
             </span>
             {chapter.status && (
               <StatusBadge status={chapter.status} size="sm" />
             )}
           </div>
-          <h3 className="text-white font-semibold text-base leading-tight line-clamp-2">
+          <h3 className="text-slate-900 dark:text-white font-semibold text-base leading-tight line-clamp-2">
             {chapter.name_chapter}
           </h3>
           {manuscriptTitle && (
-            <p className="text-slate-500 text-xs mt-1 line-clamp-1">
+            <p className="text-slate-600 dark:text-slate-400 text-xs mt-1 line-clamp-1">
               {manuscriptTitle}
             </p>
           )}
 
-          <div className="flex items-center gap-3 mt-2 text-xs text-slate-400 flex-wrap">
+          <div className="flex items-center gap-3 mt-2 text-xs text-slate-600 dark:text-slate-400 flex-wrap">
             {chapter.word_count != null && (
               <span>{formatWordCountNumber(chapter.word_count)} words</span>
             )}
@@ -84,7 +84,7 @@ export const ChapterCard: React.FC<ChapterCardProps> = memo(({
           </div>
 
           {chapter.summary && (
-            <p className="text-slate-400 text-xs mt-3 line-clamp-2">
+            <p className="text-slate-600 dark:text-slate-400 text-xs mt-3 line-clamp-2">
               {chapter.summary}
             </p>
           )}

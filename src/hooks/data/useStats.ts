@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { StatsRow } from '@/lib/repository/statsRepository'
 import { getStatsByUserId, recalculateAndUpsertStats } from '@/lib/repository/statsRepository'
 
@@ -28,10 +28,6 @@ export const useStats = () => {
     }
     setStats(data ?? null)
   }, [])
-
-  useEffect(() => {
-    void fetchStats()
-  }, [fetchStats])
 
   return { stats, isLoading, error, fetchStats, refreshStats }
 }

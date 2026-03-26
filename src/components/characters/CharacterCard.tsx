@@ -54,7 +54,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = memo(({
       >
         <div className="flex items-center gap-4 flex-1 min-w-0">
           {/* Avatar */}
-          <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-base font-bold text-white border-2 border-slate-800 shadow-sm shrink-0">
+          <div className="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-base font-bold text-slate-800 dark:text-white border-2 border-slate-300 dark:border-slate-800 shadow-sm shrink-0">
             {character.picture ? (
               <img
                 src={character.picture}
@@ -68,7 +68,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = memo(({
 
           {/* Content */}
           <div className="flex-1 min-w-0">
-            <h4 className="text-white font-semibold text-base truncate">{character.name}</h4>
+            <h4 className="text-slate-900 dark:text-white font-semibold text-base truncate">{character.name}</h4>
             <div className="flex items-center gap-2 mt-0.5 flex-wrap">
               {character.role && (
                 <span className="px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 shrink-0">

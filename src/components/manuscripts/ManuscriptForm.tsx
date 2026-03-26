@@ -22,8 +22,8 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
   });
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-slate-800 rounded-xl border border-slate-700 shadow-sm">
-      <h2 className="text-2xl font-bold text-white mb-6">
+    <div className="max-w-3xl mx-auto p-6 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">
         {initialDataForm ? 'Editar Manuscrito' : 'Nuevo Manuscrito'}
       </h2>
 
@@ -36,7 +36,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
 
         {/* Title */}
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="title" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Title *
           </label>
           <input
@@ -47,9 +47,9 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
             onChange={handleInputChange}
             onBlur={handleBlur}
             required
-            className={`w-full mt-1 px-4 py-2 bg-slate-700/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.title && touchedFields.has('title')
+            className={`w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.title && touchedFields.has('title')
                 ? 'border-red-500 focus:ring-red-500'
-                : 'border-slate-600 focus:ring-purple-500'
+                : 'border-slate-200 dark:border-slate-600 focus:ring-purple-500'
               }`}
           />
           {fieldErrors.title && touchedFields.has('title') && (
@@ -59,7 +59,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
 
         {/* Summary */}
         <div>
-          <label htmlFor="summary" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="summary" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Summary
           </label>
           <textarea
@@ -69,22 +69,22 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
             onChange={handleInputChange}
             onBlur={handleBlur}
             rows={4}
-            className={`w-full mt-1 px-4 py-2 bg-slate-700/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.summary && touchedFields.has('summary')
+            className={`w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.summary && touchedFields.has('summary')
                 ? 'border-red-500 focus:ring-red-500'
-                : 'border-slate-600 focus:ring-purple-500'
+                : 'border-slate-200 dark:border-slate-600 focus:ring-purple-500'
               }`}
           />
           {fieldErrors.summary && touchedFields.has('summary') && (
             <p className="mt-1 text-sm text-red-400">{fieldErrors.summary}</p>
           )}
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
             {formData.summary?.length || 0} / 5000 characters
           </p>
         </div>
 
         {/* Picture */}
         <div>
-          <label htmlFor="picture" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="picture" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Image (file)
           </label>
           <input
@@ -92,16 +92,16 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
             name="picture"
             type="file"
             onChange={handleInputChange}
-            className="w-full mt-1 px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-slate-600 file:text-slate-200 file:hover:bg-slate-500"
+            className="w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white focus:outline-none file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-slate-300 file:text-slate-800 file:hover:bg-slate-400 dark:file:bg-slate-600 dark:file:text-slate-200 dark:file:hover:bg-slate-500"
           />
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
             For now, the file name is saved. If you use Supabase Storage, we will replace it with the URL.
           </p>
         </div>
 
         {/* Genre */}
         <div>
-          <label htmlFor="genre" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="genre" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Genre
           </label>
           <GenreSelect
@@ -114,7 +114,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
 
         {/* Status */}
         <div>
-          <label htmlFor="status" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="status" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Status
           </label>
           <select
@@ -123,7 +123,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
             value={formData.status ?? ''}
             onChange={handleInputChange}
             required
-            className="w-full mt-1 px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
           >
             <option value="" className="text-slate-400">Select status</option>
             <option value="Draft">Draft</option>
@@ -134,7 +134,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
 
         {/* Word Count */}
         <div>
-          <label htmlFor="word_count" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="word_count" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Word Count
           </label>
           <input
@@ -145,9 +145,9 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
             onChange={handleInputChange}
             onBlur={handleBlur}
             min={0}
-            className={`w-full mt-1 px-4 py-2 bg-slate-700/50 border rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.word_count && touchedFields.has('word_count')
+            className={`w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 ${fieldErrors.word_count && touchedFields.has('word_count')
                 ? 'border-red-500 focus:ring-red-500'
-                : 'border-slate-600 focus:ring-purple-500'
+                : 'border-slate-200 dark:border-slate-600 focus:ring-purple-500'
               }`}
           />
           {fieldErrors.word_count && touchedFields.has('word_count') && (
@@ -157,7 +157,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
 
         {/* Target Audience */}
         <div>
-          <label htmlFor="target_audience" className="block text-sm font-medium text-slate-300">
+          <label htmlFor="target_audience" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Target Audience
           </label>
           <input
@@ -166,7 +166,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
             type="text"
             value={formData.target_audience ?? ''}
             onChange={handleInputChange}
-            className="w-full mt-1 px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full mt-1 px-4 py-2 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
 
@@ -175,7 +175,7 @@ export const ManuscriptForm: React.FC<ManuscriptFormProps> = ({
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-medium rounded-lg transition-colors"
           >
             Cancel
           </button>

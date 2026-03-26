@@ -21,10 +21,22 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
     
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) throw error
+      if (error) {
+        setError(error.message)
+        return
+      }
       navigate('/')
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'Error initiating session')
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : typeof err === 'object' &&
+              err !== null &&
+              'message' in err &&
+              typeof (err as { message: unknown }).message === 'string'
+            ? (err as { message: string }).message
+            : 'Error initiating session'
+      setError(message)
     } finally {
       setLoading(false)
     }

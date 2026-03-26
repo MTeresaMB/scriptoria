@@ -19,15 +19,15 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   iconClassName = 'text-slate-500'
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center h-64 bg-slate-800 rounded-xl border border-slate-700 p-8">
+    <div className="flex flex-col items-center justify-center h-64 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
       <div className={`${iconClassName} mb-4`}>
         <Icon className="w-16 h-16 mx-auto mb-2" />
       </div>
-      <h3 className="text-xl font-semibold text-white mb-2">
+      <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
         {title}
       </h3>
       {description && (
-        <p className="text-slate-400 text-sm text-center mb-6">
+        <p className="text-slate-600 dark:text-slate-400 text-sm text-center mb-6">
           {description}
         </p>
       )}

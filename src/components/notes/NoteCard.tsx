@@ -65,19 +65,19 @@ export const NoteCard: React.FC<NoteCardProps> = memo(({
             </div>
 
             <div className="flex-1 min-w-0">
-              <h4 className="text-white font-semibold text-base truncate mb-1">
+              <h4 className="text-slate-900 dark:text-white font-semibold text-base truncate mb-1">
                 {note.title}
               </h4>
 
               {note.content && (
-                <p className="text-slate-400 text-sm line-clamp-2 mb-2">
+                <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-2">
                   {note.content}
                 </p>
               )}
 
               <div className="flex items-center gap-2 flex-wrap">
                 {note.category && (
-                  <span className="px-2 py-0.5 rounded text-xs font-medium bg-slate-700 text-slate-300 border border-slate-600 shrink-0">
+                  <span className="px-2 py-0.5 rounded text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 shrink-0">
                     {note.category}
                   </span>
                 )}

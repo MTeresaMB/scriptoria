@@ -79,16 +79,16 @@ export const ManuscriptCard: React.FC<ManuscriptCardProps> = memo(({
             <div>
               <StatusBadge status={manuscript.status} size="sm" />
             </div>
-            <h3 className="text-white font-bold text-lg leading-tight line-clamp-2">
+            <h3 className="text-slate-900 dark:text-white font-bold text-lg leading-tight line-clamp-2">
               {manuscript.title}
             </h3>
             {manuscript.genre && (
-              <p className="text-slate-400 text-xs mt-0.5">{manuscript.genre}</p>
+              <p className="text-slate-600 dark:text-slate-400 text-xs mt-0.5">{manuscript.genre}</p>
             )}
           </div>
 
           <div className="w-full mt-auto">
-            <div className="flex justify-between text-xs text-slate-400 mb-1.5">
+            <div className="flex justify-between text-xs text-slate-600 dark:text-slate-400 mb-1.5">
               <span>{formatWordCountNumber(manuscript.word_count ?? 0)} words</span>
               <span>{Math.round(progress)}%</span>
             </div>

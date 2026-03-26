@@ -4,7 +4,15 @@ import type { Manuscript, ManuscriptInsert } from '@types';
 import type { ManuscriptUpdate } from '@lib/repository/manuscriptRepository';
 import { insertManuscript, updateManuscript } from '@lib/repository/manuscriptRepository';
 import { useToast } from '@/hooks/ui/useToast';
-import { validateRequired, validateMinLength, validateMaxLength, validatePositiveNumber } from '@/utils/validations';
+import {
+  composeValidators,
+  updateFieldErrors,
+  validateMaxLength,
+  validateMinLength,
+  validatePositiveNumber,
+  validateRequired,
+  type ValidationResult,
+} from '@/utils/validations';
 import { useUnsavedChanges } from '@/hooks/ui/useUnsavedChanges';
 import { normalizeInputValue, cleanOptionalField, validateWordCountWithDefault } from '@/utils/formHelpers';
 
@@ -12,6 +20,8 @@ interface UseManuscriptFormProps {
   initialData?: Manuscript;
   onSuccess: (data: Manuscript) => void;
 }
+
+type ManuscriptField = 'title' | 'summary' | 'word_count'
 
 export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormProps) => {
   const { toast } = useToast();
@@ -29,7 +39,7 @@ export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormP
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<ManuscriptField, string>>>({});
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
 
   const hasUnsavedChanges = useMemo(() => {
@@ -53,40 +63,42 @@ export const useManuscriptForm = ({ initialData, onSuccess }: UseManuscriptFormP
     message: 'You have unsaved changes. Are you sure you want to leave?',
   });
 
-  const validateField = useCallback((name: string, value: unknown) => {
-    let validation: { isValid: boolean; error?: string } = { isValid: true };
+  const titleValidator = useCallback(
+    (value: string): ValidationResult =>
+      composeValidators<string>(
+        (v) => validateRequired(v, 'Title'),
+        (v) => validateMinLength(v, 3, 'Title'),
+        (v) => validateMaxLength(v, 200, 'Title'),
+      )(value),
+    [],
+  );
 
-    switch (name) {
-      case 'title':
-        validation = validateRequired(value as string, 'Title');
-        if (validation.isValid) {
-          validation = validateMinLength(value as string, 3, 'Title');
-        }
-        if (validation.isValid) {
-          validation = validateMaxLength(value as string, 200, 'Title');
-        }
-        break;
-      case 'word_count':
-        validation = validatePositiveNumber(value as number, 'Word count');
-        break;
-      case 'summary':
-        if (value) {
-          validation = validateMaxLength(value as string, 5000, 'Summary');
-        }
-        break;
+  const summaryValidator = useCallback(
+    (value: string | null): ValidationResult =>
+      value ? validateMaxLength(value, 5000, 'Summary') : { isValid: true },
+    [],
+  );
+
+  const wordCountValidator = useCallback(
+    (value: number | null): ValidationResult => validatePositiveNumber(value, 'Word count'),
+    [],
+  );
+
+  const validateField = useCallback((name: string, value: unknown) => {
+    let validation: ValidationResult = { isValid: true };
+
+    if (name === 'title') {
+      validation = titleValidator((value ?? '') as string);
+    } else if (name === 'word_count') {
+      validation = wordCountValidator((value as number | null) ?? null);
+    } else if (name === 'summary') {
+      validation = summaryValidator((value as string | null) ?? null);
     }
 
-    setFieldErrors(prev => {
-      if (validation.isValid) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { [name]: removed, ...rest } = prev;
-        return rest;
-      }
-      return { ...prev, [name]: validation.error || 'Invalid value' };
-    });
+    setFieldErrors(prev => updateFieldErrors(prev, name as ManuscriptField, validation));
 
     return validation.isValid;
-  }, []);
+  }, [summaryValidator, titleValidator, wordCountValidator]);
 
   const handleInputChange = useCallback(
     async (

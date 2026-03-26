@@ -4,7 +4,15 @@ import type { Chapter, ChapterInsert } from '@/types';
 import type { ChapterUpdate } from '@/lib/repository/chaptersRepository';
 import { insertChapter, updateChapter } from '@/lib/repository/chaptersRepository';
 import { useToast } from '@/hooks/ui/useToast';
-import { validateRequired, validateMinLength, validateMaxLength, validatePositiveNumber } from '@/utils/validations';
+import {
+  composeValidators,
+  updateFieldErrors,
+  validateMaxLength,
+  validateMinLength,
+  validatePositiveNumber,
+  validateRequired,
+  type ValidationResult,
+} from '@/utils/validations';
 import { useUnsavedChanges } from '@/hooks/ui/useUnsavedChanges';
 import { normalizeInputValue, cleanOptionalField, validateWordCount } from '@/utils/formHelpers';
 
@@ -13,9 +21,9 @@ interface UseChapterFormProps {
   onSuccess: (data: Chapter) => void;
 }
 
-type FormFieldName = 'name_chapter' | 'word_count' | 'summary';
+type ChapterFieldName = 'name_chapter' | 'word_count' | 'summary';
 
-const FIELDS_TO_VALIDATE: FormFieldName[] = ['name_chapter', 'word_count', 'summary'];
+const FIELDS_TO_VALIDATE: ChapterFieldName[] = ['name_chapter', 'word_count', 'summary'];
 
 export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) => {
   const { toast } = useToast();
@@ -33,7 +41,7 @@ export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) 
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<ChapterFieldName, string>>>({});
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
 
   const hasUnsavedChanges = useMemo(() => {
@@ -61,46 +69,42 @@ export const useChapterForm = ({ initialData, onSuccess }: UseChapterFormProps) 
     message: 'You have unsaved changes. Are you sure you want to leave?',
   });
 
-  const validateField = useCallback((name: string, value: unknown): boolean => {
-    let validation: { isValid: boolean; error?: string } = { isValid: true };
+  const nameValidator = useCallback(
+    (value: string): ValidationResult =>
+      composeValidators<string>(
+        (v) => validateRequired(v, 'Title'),
+        (v) => validateMinLength(v, 2, 'Title'),
+        (v) => validateMaxLength(v, 200, 'Title'),
+      )(value),
+    [],
+  );
 
-    switch (name) {
-      case 'name_chapter': {
-        validation = validateRequired(value as string, 'Title');
-        if (validation.isValid) {
-          validation = validateMinLength(value as string, 2, 'Title');
-        }
-        if (validation.isValid) {
-          validation = validateMaxLength(value as string, 200, 'Title');
-        }
-        break;
-      }
-      case 'word_count': {
-        if (value !== null && value !== undefined) {
-          validation = validatePositiveNumber(value as number, 'Word count');
-        }
-        break;
-      }
-      case 'summary': {
-        if (value) {
-          validation = validateMaxLength(value as string, 2000, 'Summary');
-        }
-        break;
-      }
+  const chapterSummaryValidator = useCallback(
+    (value: string | null): ValidationResult =>
+      value ? validateMaxLength(value, 2000, 'Summary') : { isValid: true },
+    [],
+  );
+
+  const chapterWordCountValidator = useCallback(
+    (value: number | null): ValidationResult => validatePositiveNumber(value, 'Word count'),
+    [],
+  );
+
+  const validateField = useCallback((name: string, value: unknown): boolean => {
+    let validation: ValidationResult = { isValid: true };
+
+    if (name === 'name_chapter') {
+      validation = nameValidator((value ?? '') as string);
+    } else if (name === 'word_count') {
+      validation = chapterWordCountValidator((value as number | null) ?? null);
+    } else if (name === 'summary') {
+      validation = chapterSummaryValidator((value as string | null) ?? null);
     }
 
-    setFieldErrors(prev => {
-      if (validation.isValid) {
-        const rest = Object.fromEntries(
-          Object.entries(prev).filter(([key]) => key !== name)
-        );
-        return rest;
-      }
-      return { ...prev, [name]: validation.error || 'Invalid value' };
-    });
+    setFieldErrors(prev => updateFieldErrors(prev, name as ChapterFieldName, validation));
 
     return validation.isValid;
-  }, []);
+  }, [chapterSummaryValidator, chapterWordCountValidator, nameValidator]);
 
   const handleInputChange = useCallback((
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>

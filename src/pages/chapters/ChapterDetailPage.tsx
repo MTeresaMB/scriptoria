@@ -133,16 +133,16 @@ export const ChapterDetailPage: React.FC = () => {
   if (!chapter) {
     return (
       <div className="p-6">
-        <div className="flex flex-col items-center justify-center h-64 bg-slate-800 rounded-xl border border-slate-700 p-8">
-          <h3 className="text-xl font-semibold text-white mb-2">
+        <div className="flex flex-col items-center justify-center h-64 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-8">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
             Chapter not found
           </h3>
-          <p className="text-slate-400 text-sm text-center mb-4">
+          <p className="text-slate-600 dark:text-slate-400 text-sm text-center mb-4">
             The chapter you're looking for doesn't exist or has been deleted.
           </p>
           <button
             onClick={() => navigate(returnTo)}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-slate-900 dark:text-slate-900 dark:text-white font-medium rounded-lg transition-colors"
           >
             Go back
           </button>
@@ -163,16 +163,16 @@ export const ChapterDetailPage: React.FC = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate(returnTo)}
-              className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
               aria-label="Go back"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wide">
+              <p className="text-xs text-slate-600 dark:text-slate-400 uppercase tracking-wide">
                 {chapterLabel}
               </p>
-              <h1 className="text-3xl font-bold text-white">{chapter.name_chapter}</h1>
+              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">{chapter.name_chapter}</h1>
             </div>
           </div>
           <CardMenu
@@ -184,39 +184,39 @@ export const ChapterDetailPage: React.FC = () => {
         </div>
 
         {/* Main info */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
           <div className="flex items-start gap-6">
-            <div className="w-16 h-16 rounded-xl bg-slate-700 flex items-center justify-center text-white shrink-0">
-              <FileText className="w-8 h-8 text-white opacity-80" />
+            <div className="w-16 h-16 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-800 dark:text-white shrink-0">
+              <FileText className="w-8 h-8 text-slate-700 dark:text-white opacity-80" />
             </div>
 
             <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
               {chapter.status && (
                 <div>
-                  <p className="text-slate-400 text-sm">Status</p>
-                  <p className="text-white font-medium">{chapter.status}</p>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Status</p>
+                  <p className="text-slate-900 dark:text-white font-medium">{chapter.status}</p>
                 </div>
               )}
               {chapter.word_count != null && (
                 <div>
-                  <p className="text-slate-400 text-sm">Word count</p>
-                  <p className="text-white font-medium">
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Word count</p>
+                  <p className="text-slate-900 dark:text-white font-medium">
                     {formatWordCount(chapter.word_count)}
                   </p>
                 </div>
               )}
               {chapter.date_created && (
                 <div>
-                  <p className="text-slate-400 text-sm">Created</p>
-                  <p className="text-white font-medium">
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Created</p>
+                  <p className="text-slate-900 dark:text-white font-medium">
                     {formatDate(chapter.date_created)}
                   </p>
                 </div>
               )}
               {chapter.last_edit && (
                 <div>
-                  <p className="text-slate-400 text-sm">Last edit</p>
-                  <p className="text-white font-medium">
+                  <p className="text-slate-600 dark:text-slate-400 text-sm">Last edit</p>
+                  <p className="text-slate-900 dark:text-white font-medium">
                     {formatDate(chapter.last_edit)}
                   </p>
                 </div>
@@ -227,8 +227,8 @@ export const ChapterDetailPage: React.FC = () => {
 
         {/* Related Manuscript */}
         {chapter.id_manuscript && (
-          <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
-            <h2 className="text-xl font-semibold text-white mb-4">Related Manuscript</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Related Manuscript</h2>
             {(() => {
               const relatedManuscript = manuscripts?.find((m) => m.id_manuscript === chapter.id_manuscript);
               if (!relatedManuscript) {
@@ -237,17 +237,17 @@ export const ChapterDetailPage: React.FC = () => {
               return (
                 <button
                   onClick={() => navigate(`/manuscripts/${relatedManuscript.id_manuscript}?from=chapter-detail`)}
-                  className="flex items-center gap-3 p-4 bg-slate-700/50 hover:bg-slate-700 rounded-lg transition-colors w-full text-left group"
+                  className="flex items-center gap-3 p-4 bg-slate-100 dark:bg-slate-700/50 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition-colors w-full text-left group"
                 >
                   <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center shrink-0">
                     <BookOpen className="w-6 h-6 text-purple-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-semibold group-hover:text-purple-400 transition-colors truncate">
+                    <h3 className="text-slate-900 dark:text-white font-semibold group-hover:text-purple-400 transition-colors truncate">
                       {relatedManuscript.title}
                     </h3>
                     {relatedManuscript.genre && (
-                      <p className="text-slate-400 text-sm mt-1">{relatedManuscript.genre}</p>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">{relatedManuscript.genre}</p>
                     )}
                   </div>
                   <ExternalLink className="w-5 h-5 text-slate-400 group-hover:text-purple-400 transition-colors shrink-0" />
@@ -268,10 +268,10 @@ export const ChapterDetailPage: React.FC = () => {
         )}
 
         {/* Summary */}
-        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">Summary</h2>
+        <div className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-4">Summary</h2>
           {chapter.summary ? (
-            <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <p className="text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
               {chapter.summary}
             </p>
           ) : (

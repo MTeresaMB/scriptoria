@@ -108,8 +108,8 @@ export const ManuscriptsList: React.FC<ManuscriptsListProps> = ({ onCreateNewMan
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Your Manuscripts</h2>
-          <p className="text-slate-400 mt-1">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Your Manuscripts</h2>
+          <p className="text-slate-600 dark:text-slate-400 mt-1">
             {filteredAndSortedManuscripts.length} of {manuscripts.length} {manuscripts.length === 1 ? 'Manuscript' : 'Manuscripts'}
           </p>
         </div>
@@ -148,7 +148,7 @@ export const ManuscriptsList: React.FC<ManuscriptsListProps> = ({ onCreateNewMan
 
       {filteredAndSortedManuscripts.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-slate-400">No manuscripts match your filters.</p>
+          <p className="text-slate-600 dark:text-slate-400">No manuscripts match your filters.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
+import { readLocalStorage, writeLocalStorage } from '@/utils/localStorage'
 import { ThemeContext, type Theme } from './theme'
 
 const STORAGE_KEY = 'scriptoria_theme'
@@ -6,14 +7,14 @@ const STORAGE_KEY = 'scriptoria_theme'
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window === 'undefined') return 'dark'
-    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
+    const stored = readLocalStorage(STORAGE_KEY)
     return stored === 'light' ? 'light' : 'dark'
   })
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, theme)
-    document.documentElement.classList.remove('dark', 'light')
-    document.documentElement.classList.add(theme)
+  useLayoutEffect(() => {
+    void writeLocalStorage(STORAGE_KEY, theme)
+    // Tailwind `dark:` variants apply when `.dark` is on an ancestor (typically <html>)
+    document.documentElement.classList.toggle('dark', theme === 'dark')
   }, [theme])
 
   const setTheme = (t: Theme) => setThemeState(t)

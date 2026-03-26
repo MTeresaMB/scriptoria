@@ -79,7 +79,7 @@ export const CardMenu: React.FC<CardMenuProps> = ({
           e.stopPropagation();
           setIsOpen(!isOpen);
         }}
-        className="p-2 rounded-full hover:bg-slate-700 text-slate-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+        className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-slate-800"
         aria-label={`${itemType} menu`}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -100,7 +100,7 @@ export const CardMenu: React.FC<CardMenuProps> = ({
           {createPortal(
             <div
               ref={menuRef}
-              className="w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl py-1"
+              className="w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl py-1"
               style={dropdownStyle}
             >
             {onView && (
@@ -109,7 +109,7 @@ export const CardMenu: React.FC<CardMenuProps> = ({
                   e.stopPropagation();
                   handleAction(onView);
                 }}
-                className="w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-2 focus:outline-none focus:bg-slate-700"
+                className="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2 focus:outline-none focus:bg-slate-100 dark:focus:bg-slate-700"
               >
                 <Eye className="w-4 h-4" />
                 <span>View</span>
@@ -122,7 +122,7 @@ export const CardMenu: React.FC<CardMenuProps> = ({
                   e.stopPropagation();
                   handleAction(onEdit);
                 }}
-                className="w-full px-4 py-2 text-left text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-2 focus:outline-none focus:bg-slate-700"
+                className="w-full px-4 py-2 text-left text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-2 focus:outline-none focus:bg-slate-100 dark:focus:bg-slate-700"
               >
                 <Edit className="w-4 h-4" />
                 <span>Edit</span>
@@ -135,7 +135,7 @@ export const CardMenu: React.FC<CardMenuProps> = ({
                   e.stopPropagation();
                   handleAction(onEditInEditor);
                 }}
-                className="w-full px-4 py-2 text-left text-sm text-purple-300 hover:bg-purple-500/10 hover:text-purple-200 transition-colors flex items-center gap-2 focus:outline-none focus:bg-purple-500/10"
+                className="w-full px-4 py-2 text-left text-sm text-purple-700 dark:text-purple-300 hover:bg-purple-500/10 hover:text-purple-900 dark:hover:text-purple-200 transition-colors flex items-center gap-2 focus:outline-none focus:bg-purple-500/10"
               >
                 <FileEdit className="w-4 h-4" />
                 <span>Edit in Editor</span>
