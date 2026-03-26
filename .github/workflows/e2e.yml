@@ -1,0 +1,27 @@
+name: E2E
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium --with-deps
+      # Placeholders para que Vite arranque. Sin E2E_EMAIL solo corre smoke (chromium-public).
+      # Para suite autenticada en CI: secretos E2E_EMAIL, E2E_PASSWORD y Vite reales (o vars de preview).
+      - run: npm run test:e2e
+        env:
+          CI: true
+          VITE_SUPABASE_URL: https://placeholder.supabase.co
+          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.placeholder
