@@ -145,7 +145,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
   const StatusIcon = saveStatus.icon
 
   return (
-    <div className="bg-slate-800 border-b border-slate-700">
+    <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
       <div className="flex items-center justify-between px-4 py-3">
         {/* Left: Navigation & Title */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -155,7 +155,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
               <button
                 onClick={() => previousChapterId && onNavigateToChapter(previousChapterId)}
                 disabled={!previousChapterId}
-                className="p-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 title="Previous Chapter"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -163,7 +163,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
               <button
                 onClick={() => nextChapterId && onNavigateToChapter(nextChapterId)}
                 disabled={!nextChapterId}
-                className="p-1.5 rounded hover:bg-slate-700 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-1.5 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 title="Next Chapter"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -174,15 +174,15 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
           {/* Title / Breadcrumb */}
           <div className="flex-1 min-w-0">
             {(manuscriptTitle || chapterTitle) && (
-              <div className="flex items-center gap-2 text-sm text-slate-400 truncate">
+              <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 truncate">
                 {manuscriptTitle && (
                   <>
-                    <span className="font-medium text-slate-300">{manuscriptTitle}</span>
+                    <span className="font-medium text-slate-800 dark:text-slate-300">{manuscriptTitle}</span>
                     {chapterTitle && <span>›</span>}
                   </>
                 )}
                 {chapterTitle && (
-                  <h2 className="text-lg font-semibold text-white truncate">
+                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white truncate">
                     {chapterTitle}
                   </h2>
                 )}
@@ -191,7 +191,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
             {chapter?.status && (
               <div className="mt-1 flex items-center gap-2">
                 {chapter.status && (
-                  <span className="px-2 py-0.5 bg-slate-700 text-slate-300 text-xs rounded">
+                  <span className="px-2 py-0.5 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs rounded">
                     {chapter.status}
                   </span>
                 )}
@@ -231,7 +231,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
             className={`p-2 rounded-lg transition-colors ${
               isSearchOpen
                 ? 'bg-purple-600 text-white'
-                : 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                : 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300'
             }`}
             title="Search (Ctrl+F)"
           >
@@ -243,7 +243,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
             className={`p-2 rounded-lg transition-colors ${
               isSidebarOpen
                 ? 'bg-purple-600 text-white'
-                : 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                : 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300'
             }`}
             title="Chapter Info"
           >
@@ -287,7 +287,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
 
           <button
             onClick={onToggleDistractionFree}
-            className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors"
+            className="p-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 transition-colors"
             title="Distraction-free mode"
           >
             <Maximize2 className="w-4 h-4" />
@@ -296,7 +296,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
           <button
             onClick={onSave}
             disabled={isSaving || !hasUnsavedChanges}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:opacity-50 text-white font-medium rounded-lg transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:opacity-50 text-white font-medium rounded-lg transition-colors"
             title="Save (Ctrl+S)"
           >
             {isSaving ? (

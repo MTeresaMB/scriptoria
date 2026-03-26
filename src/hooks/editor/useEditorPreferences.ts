@@ -1,4 +1,9 @@
 import { useState, useCallback } from 'react'
+import {
+  readLocalStorage,
+  removeLocalStorage,
+  writeLocalStorageJson,
+} from '@/utils/localStorage'
 
 export type EditorTheme = 'dark' | 'light' | 'sepia'
 export type EditorFont = 'sans-serif' | 'serif' | 'monospace'
@@ -42,15 +47,15 @@ const STORAGE_KEY = 'editor_preferences'
 
 export const useEditorPreferences = () => {
   const [preferences, setPreferences] = useState<EditorPreferences>(() => {
+    const raw = readLocalStorage(STORAGE_KEY)
+    if (!raw) return DEFAULT_PREFERENCES
     try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        return { ...DEFAULT_PREFERENCES, ...JSON.parse(stored) }
-      }
+      const parsed = JSON.parse(raw) as Partial<EditorPreferences>
+      return { ...DEFAULT_PREFERENCES, ...parsed }
     } catch (error) {
       console.error('Error loading editor preferences:', error)
+      return DEFAULT_PREFERENCES
     }
-    return DEFAULT_PREFERENCES
   })
 
   const updatePreference = useCallback(<K extends keyof EditorPreferences>(
@@ -59,10 +64,9 @@ export const useEditorPreferences = () => {
   ) => {
     setPreferences((prev) => {
       const updated = { ...prev, [key]: value }
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-      } catch (error) {
-        console.error('Error saving editor preferences:', error)
+      const ok = writeLocalStorageJson(STORAGE_KEY, updated)
+      if (!ok) {
+        console.error('Error saving editor preferences')
       }
       return updated
     })
@@ -70,10 +74,9 @@ export const useEditorPreferences = () => {
 
   const resetPreferences = useCallback(() => {
     setPreferences(DEFAULT_PREFERENCES)
-    try {
-      localStorage.removeItem(STORAGE_KEY)
-    } catch (error) {
-      console.error('Error resetting editor preferences:', error)
+    const ok = removeLocalStorage(STORAGE_KEY)
+    if (!ok) {
+      console.error('Error resetting editor preferences')
     }
   }, [])
 

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @keyframes slide-in-right {
   from {
@@ -15,12 +16,11 @@
   animation: slide-in-right 0.3s ease-out;
 }
 
-/* TipTap Editor Styles */
+/* TipTap: estructura y listas (colores solo en .editor-theme-*) */
 .ProseMirror {
   outline: none;
   min-height: 500px;
   padding: 1rem;
-  color: #e2e8f0; /* Default dark theme color */
   line-height: 1.75;
 }
 
@@ -29,86 +29,69 @@
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
-  color: #64748b;
   content: attr(data-placeholder);
   float: left;
   height: 0;
   pointer-events: none;
 }
 
-.editor-theme-light .ProseMirror p.is-editor-empty:first-child::before {
-  color: #9ca3af !important; /* Lighter gray for light theme */
-}
-
-.editor-theme-sepia .ProseMirror p.is-editor-empty:first-child::before {
-  color: #a16207 !important; /* Brown for sepia theme */
-}
-
 .ProseMirror h1 {
   font-size: 2em;
   font-weight: bold;
   margin: 0.67em 0;
-  color: #f1f5f9;
 }
 
 .ProseMirror h2 {
   font-size: 1.5em;
   font-weight: bold;
   margin: 0.75em 0;
-  color: #f1f5f9;
 }
 
 .ProseMirror h3 {
   font-size: 1.17em;
   font-weight: bold;
   margin: 0.83em 0;
-  color: #f1f5f9;
 }
 
 .ProseMirror ul {
-  list-style-type: disc !important;
-  padding-left: 2em !important;
-  margin: 1em 0 !important;
-  list-style-position: outside !important;
+  list-style-type: disc;
+  padding-left: 2em;
+  margin: 1em 0;
+  list-style-position: outside;
 }
 
 .ProseMirror ol {
-  list-style-type: decimal !important;
-  padding-left: 2em !important;
-  margin: 1em 0 !important;
-  list-style-position: outside !important;
+  list-style-type: decimal;
+  padding-left: 2em;
+  margin: 1em 0;
+  list-style-position: outside;
 }
 
 .ProseMirror li {
-  margin: 0.5em 0 !important;
-  display: list-item !important;
-  list-style-position: outside !important;
+  margin: 0.5em 0;
+  display: list-item;
+  list-style-position: outside;
 }
 
 .ProseMirror ul ul {
-  list-style-type: circle !important;
+  list-style-type: circle;
 }
 
 .ProseMirror ul ul ul {
-  list-style-type: square !important;
+  list-style-type: square;
 }
 
 .ProseMirror ol ol {
-  list-style-type: lower-alpha !important;
+  list-style-type: lower-alpha;
 }
 
 .ProseMirror ol ol ol {
-  list-style-type: lower-roman !important;
+  list-style-type: lower-roman;
 }
 
 .ProseMirror a {
-  color: #a78bfa;
   text-decoration: underline;
   cursor: pointer;
-}
-
-.ProseMirror a:hover {
-  color: #c4b5fd;
 }
 
 .ProseMirror strong {
@@ -124,8 +107,6 @@
 }
 
 .ProseMirror code {
-  background-color: #1e293b;
-  color: #f1f5f9;
   padding: 0.2em 0.4em;
   border-radius: 0.25rem;
   font-family: monospace;
@@ -133,18 +114,16 @@
 }
 
 .ProseMirror blockquote {
-  border-left: 4px solid #475569;
+  border-left: 4px solid;
   padding-left: 1em;
   margin: 1em 0;
-  color: #cbd5e1;
   font-style: italic;
 }
 
-/* Preview Mode Styles */
+/* Vista previa: tipografía; colores por tema debajo */
 .preview-mode {
   font-family: Georgia, 'Times New Roman', serif;
   line-height: 1.8;
-  color: #e2e8f0;
 }
 
 .preview-mode h1 {
@@ -152,7 +131,6 @@
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   font-weight: bold;
-  color: #f1f5f9;
 }
 
 .preview-mode h2 {
@@ -160,7 +138,6 @@
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   font-weight: bold;
-  color: #f1f5f9;
 }
 
 .preview-mode h3 {
@@ -168,17 +145,11 @@
   margin-top: 1.5em;
   margin-bottom: 0.5em;
   font-weight: bold;
-  color: #f1f5f9;
 }
 
 .preview-mode p {
   margin: 1.2em 0;
   text-align: justify;
-}
-
-.preview-mode a {
-  color: #a78bfa;
-  text-decoration: underline;
 }
 
 .preview-mode strong {
@@ -199,59 +170,306 @@
   margin: 0.5em 0;
 }
 
-/* Theme Support */
+.preview-mode a {
+  text-decoration: underline;
+}
+
+/* Tema editor: dark (fondo claro en UI, texto oscuro) */
+.editor-theme-dark .ProseMirror,
+.editor-theme-dark .ProseMirror p,
+.editor-theme-dark .ProseMirror li {
+  color: #1e293b;
+}
+
+.editor-theme-dark .ProseMirror h1,
+.editor-theme-dark .ProseMirror h2,
+.editor-theme-dark .ProseMirror h3 {
+  color: #0f172a;
+}
+
+.editor-theme-dark .ProseMirror a {
+  color: #6d28d9;
+}
+
+.editor-theme-dark .ProseMirror a:hover {
+  color: #5b21b6;
+}
+
+.editor-theme-dark .ProseMirror code {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.editor-theme-dark .ProseMirror blockquote {
+  border-left-color: #94a3b8;
+  color: #334155;
+}
+
+.editor-theme-dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: #64748b;
+}
+
+.editor-theme-dark .preview-mode,
+.editor-theme-dark .preview-mode p {
+  color: #1e293b;
+}
+
+.editor-theme-dark .preview-mode h1,
+.editor-theme-dark .preview-mode h2,
+.editor-theme-dark .preview-mode h3 {
+  color: #0f172a;
+}
+
+.editor-theme-dark .preview-mode a {
+  color: #6d28d9;
+}
+
+/* App en modo oscuro: lienzo oscuro + texto claro (data-editor-surface en ChapterEditor) */
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror,
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror p,
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror li {
+  color: #e2e8f0;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror h1,
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror h2,
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror h3 {
+  color: #f8fafc;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror a {
+  color: #a78bfa;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror a:hover {
+  color: #c4b5fd;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror code {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror blockquote {
+  border-left-color: #64748b;
+  color: #cbd5e1;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .ProseMirror p.is-editor-empty:first-child::before {
+  color: #94a3b8;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .preview-mode,
+.editor-theme-dark[data-editor-surface='dark'] .preview-mode p {
+  color: #e2e8f0;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .preview-mode h1,
+.editor-theme-dark[data-editor-surface='dark'] .preview-mode h2,
+.editor-theme-dark[data-editor-surface='dark'] .preview-mode h3 {
+  color: #f8fafc;
+}
+
+.editor-theme-dark[data-editor-surface='dark'] .preview-mode a {
+  color: #a78bfa;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror,
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror p,
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror li {
+  color: #e2e8f0;
+  background-color: transparent;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror h1,
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror h2,
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror h3 {
+  color: #f8fafc;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror a {
+  color: #a78bfa;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror a:hover {
+  color: #c4b5fd;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror code {
+  background-color: #1e293b;
+  color: #f1f5f9;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror blockquote {
+  border-left-color: #64748b;
+  color: #cbd5e1;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .ProseMirror p.is-editor-empty:first-child::before {
+  color: #94a3b8;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .preview-mode,
+.editor-theme-light[data-editor-surface='dark'] .preview-mode p {
+  color: #e2e8f0;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .preview-mode h1,
+.editor-theme-light[data-editor-surface='dark'] .preview-mode h2,
+.editor-theme-light[data-editor-surface='dark'] .preview-mode h3 {
+  color: #f8fafc;
+}
+
+.editor-theme-light[data-editor-surface='dark'] .preview-mode a {
+  color: #a78bfa;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror,
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror p,
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror li {
+  color: #fde68a;
+  background-color: transparent;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror h1,
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror h2,
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror h3 {
+  color: #fef3c7;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror a {
+  color: #fcd34d;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror code {
+  background-color: #422006;
+  color: #fde68a;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror blockquote {
+  border-left-color: #b45309;
+  color: #fcd34d;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .ProseMirror p.is-editor-empty:first-child::before {
+  color: #d97706;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .preview-mode,
+.editor-theme-sepia[data-editor-surface='dark'] .preview-mode p {
+  color: #fde68a;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .preview-mode h1,
+.editor-theme-sepia[data-editor-surface='dark'] .preview-mode h2,
+.editor-theme-sepia[data-editor-surface='dark'] .preview-mode h3 {
+  color: #fef3c7;
+}
+
+.editor-theme-sepia[data-editor-surface='dark'] .preview-mode a {
+  color: #fcd34d;
+}
+
+/* Tema editor: light (fondo del “papel” = contenedor Tailwind; ProseMirror transparente) */
 .editor-theme-light .ProseMirror,
 .editor-theme-light .ProseMirror p,
 .editor-theme-light .ProseMirror li {
-  color: #1a1a1a !important; /* Dark text for better contrast on white */
-  background-color: #ffffff;
+  color: #1a1a1a;
+  background-color: transparent;
 }
 
 .editor-theme-light .ProseMirror h1,
 .editor-theme-light .ProseMirror h2,
 .editor-theme-light .ProseMirror h3 {
-  color: #000000 !important; /* Black for headings for maximum contrast */
+  color: #000000;
 }
 
 .editor-theme-light .ProseMirror a {
-  color: #7c3aed !important; /* Purple links that are visible on white */
+  color: #7c3aed;
+}
+
+.editor-theme-light .ProseMirror a:hover {
+  color: #6d28d9;
 }
 
 .editor-theme-light .ProseMirror code {
-  background-color: #f3f4f6 !important;
-  color: #1a1a1a !important;
+  background-color: #f3f4f6;
+  color: #1a1a1a;
 }
 
 .editor-theme-light .ProseMirror blockquote {
-  border-left-color: #9ca3af !important;
-  color: #374151 !important;
+  border-left-color: #9ca3af;
+  color: #374151;
 }
 
+.editor-theme-light .ProseMirror p.is-editor-empty:first-child::before {
+  color: #9ca3af;
+}
+
+.editor-theme-light .preview-mode,
+.editor-theme-light .preview-mode p {
+  color: #1a1a1a;
+}
+
+.editor-theme-light .preview-mode h1,
+.editor-theme-light .preview-mode h2,
+.editor-theme-light .preview-mode h3 {
+  color: #000000;
+}
+
+.editor-theme-light .preview-mode a {
+  color: #7c3aed;
+}
+
+/* Tema editor: sepia (tono del lienzo en el contenedor; ProseMirror transparente) */
 .editor-theme-sepia .ProseMirror,
 .editor-theme-sepia .ProseMirror p,
 .editor-theme-sepia .ProseMirror li {
-  color: #451a03 !important; /* Dark brown text for better contrast on sepia */
-  background-color: #fef3c7;
+  color: #451a03;
+  background-color: transparent;
 }
 
 .editor-theme-sepia .ProseMirror h1,
 .editor-theme-sepia .ProseMirror h2,
 .editor-theme-sepia .ProseMirror h3 {
-  color: #292524 !important; /* Very dark brown for headings */
+  color: #292524;
 }
 
 .editor-theme-sepia .ProseMirror a {
-  color: #7c2d12 !important; /* Dark red-brown links */
+  color: #7c2d12;
+}
+
+.editor-theme-sepia .ProseMirror a:hover {
+  color: #991b1b;
 }
 
 .editor-theme-sepia .ProseMirror code {
-  background-color: #fde68a !important;
-  color: #451a03 !important;
+  background-color: #fde68a;
+  color: #451a03;
 }
 
 .editor-theme-sepia .ProseMirror blockquote {
-  border-left-color: #92400e !important;
-  color: #78350f !important;
+  border-left-color: #92400e;
+  color: #78350f;
+}
+
+.editor-theme-sepia .ProseMirror p.is-editor-empty:first-child::before {
+  color: #a16207;
+}
+
+.editor-theme-sepia .preview-mode,
+.editor-theme-sepia .preview-mode p {
+  color: #451a03;
+}
+
+.editor-theme-sepia .preview-mode h1,
+.editor-theme-sepia .preview-mode h2,
+.editor-theme-sepia .preview-mode h3 {
+  color: #292524;
+}
+
+.editor-theme-sepia .preview-mode a {
+  color: #7c2d12;
 }
 
 /* Font Family Support */

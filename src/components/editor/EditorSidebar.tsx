@@ -4,6 +4,7 @@ import type { ChapterRow } from '@/lib/repository/chaptersRepository'
 import { formatDate, formatWordCountNumber } from '@/utils/formatters'
 import { StatusBadge } from '@/components/common/statusBadge/StatusBadge'
 import { ReadabilityAnalysis } from './ReadabilityAnalysis'
+import { sanitizeEditorHtml } from '@/utils/sanitizeEditorHtml'
 
 interface EditorSidebarProps {
   chapter: ChapterRow | null
@@ -44,7 +45,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
 
   const headings = useMemo(() => {
     const div = document.createElement('div')
-    div.innerHTML = content
+    div.innerHTML = sanitizeEditorHtml(content)
     const els = div.querySelectorAll('h1, h2, h3')
     return Array.from(els).map((el, i) => ({
       tag: el.tagName,
@@ -77,7 +78,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
   if (!isOpen || !chapter) return null
 
   return (
-    <div className="flex flex-col bg-slate-800 border-l border-slate-700 relative shrink-0" style={{ width: sidebarWidth }}>
+    <div className="flex flex-col bg-white dark:bg-slate-800 border-l border-slate-200 dark:border-slate-700 relative shrink-0" style={{ width: sidebarWidth }}>
       {/* Resize handle */}
       <div
         className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-purple-500/50 transition-colors -ml-0.5"
@@ -86,24 +87,24 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
         aria-orientation="vertical"
       />
       {/* Header */}
-      <div className="p-4 border-b border-slate-700 flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-white">Chapter Info</h3>
+      <div className="p-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Chapter Info</h3>
         <button
           onClick={onClose}
-          className="p-1 rounded hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+          className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
         >
           ×
         </button>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-700">
+      <div className="flex border-b border-slate-200 dark:border-slate-700">
         <button
           onClick={() => setActiveTab('info')}
           className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
             activeTab === 'info'
-              ? 'bg-slate-700 text-white border-b-2 border-purple-500'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white border-b-2 border-purple-500'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
           <FileText className="w-4 h-4 mx-auto mb-1" />
@@ -113,8 +114,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
           onClick={() => setActiveTab('stats')}
           className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
             activeTab === 'stats'
-              ? 'bg-slate-700 text-white border-b-2 border-purple-500'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white border-b-2 border-purple-500'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
           <BarChart3 className="w-4 h-4 mx-auto mb-1" />
@@ -124,8 +125,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
           onClick={() => setActiveTab('analysis')}
           className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
             activeTab === 'analysis'
-              ? 'bg-slate-700 text-white border-b-2 border-purple-500'
-              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white border-b-2 border-purple-500'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
           <BookOpen className="w-4 h-4 mx-auto mb-1" />
@@ -136,8 +137,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
             onClick={() => setActiveTab('outline')}
             className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
               activeTab === 'outline'
-                ? 'bg-slate-700 text-white border-b-2 border-purple-500'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white border-b-2 border-purple-500'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <List className="w-4 h-4 mx-auto mb-1" />
@@ -149,8 +150,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
             onClick={() => setActiveTab('history')}
             className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
               activeTab === 'history'
-                ? 'bg-slate-700 text-white border-b-2 border-purple-500'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white border-b-2 border-purple-500'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <History className="w-4 h-4 mx-auto mb-1" />
@@ -162,8 +163,8 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
             onClick={() => setActiveTab('navigation')}
             className={`flex-1 px-3 py-2 text-xs font-medium transition-colors ${
               activeTab === 'navigation'
-                ? 'bg-slate-700 text-white border-b-2 border-purple-500'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                ? 'bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white border-b-2 border-purple-500'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <Navigation className="w-4 h-4 mx-auto mb-1" />
@@ -179,18 +180,18 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
           <div className="space-y-6">
             {/* Basic Info */}
             <div>
-              <h4 className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
+              <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
                 <FileText className="w-4 h-4" />
                 Basic Information
               </h4>
               <div className="space-y-3">
                 <div>
                   <p className="text-xs text-slate-400 mb-1">Title</p>
-                  <p className="text-white font-medium">{chapter.name_chapter}</p>
+                  <p className="text-slate-900 dark:text-white font-medium">{chapter.name_chapter}</p>
                 </div>
                 
                 <div>
-                  <p className="text-xs text-slate-400 mb-1 flex items-center gap-1">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1">
                     <Hash className="w-3 h-3" />
                     Chapter Number
                   </p>
@@ -200,7 +201,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                         type="number"
                         value={editValue}
                         onChange={(e) => setEditValue(e.target.value)}
-                        className="flex-1 px-2 py-1 bg-slate-700 border border-slate-600 rounded text-white text-sm"
+                        className="flex-1 px-2 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white text-sm"
                         autoFocus
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
@@ -231,7 +232,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                         setEditValue(String(chapter.chapter_number ?? ''))
                         setIsEditing('chapter_number')
                       }}
-                      className="text-white font-medium hover:underline"
+                      className="text-slate-900 dark:text-white font-medium hover:underline"
                     >
                       {chapter.chapter_number != null ? `Chapter ${chapter.chapter_number}` : 'Set number'}
                     </button>
@@ -249,7 +250,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                             onUpdateChapter?.({ status: s })
                             setIsEditing(null)
                           }}
-                          className="px-2 py-1 bg-slate-700 hover:bg-purple-600 text-white text-xs rounded"
+                          className="px-2 py-1 bg-slate-200 dark:bg-slate-700 hover:bg-purple-600 text-slate-900 dark:text-white text-xs rounded"
                         >
                           {s}
                         </button>
@@ -275,7 +276,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
 
             {/* Dates */}
             <div>
-              <h4 className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
+              <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 Dates
               </h4>
@@ -283,16 +284,16 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                 {chapter.date_created && (
                   <div>
                     <p className="text-xs text-slate-400 mb-1">Created</p>
-                    <p className="text-white text-sm">{formatDate(chapter.date_created)}</p>
+                    <p className="text-slate-900 dark:text-white text-sm">{formatDate(chapter.date_created)}</p>
                   </div>
                 )}
                 {chapter.last_edit && (
                   <div>
-                    <p className="text-xs text-slate-400 mb-1 flex items-center gap-1">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1">
                       <Edit3 className="w-3 h-3" />
                       Last Edit
                     </p>
-                    <p className="text-white text-sm">{formatDate(chapter.last_edit)}</p>
+                    <p className="text-slate-900 dark:text-white text-sm">{formatDate(chapter.last_edit)}</p>
                   </div>
                 )}
               </div>
@@ -300,13 +301,13 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
 
             {/* Summary */}
             <div>
-              <h4 className="text-sm font-medium text-slate-300 mb-3">Summary</h4>
+              <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Summary</h4>
               {isEditing === 'summary' ? (
                 <div className="space-y-2">
                   <textarea
                     value={editValue}
                     onChange={(e) => setEditValue(e.target.value)}
-                    className="w-full px-2 py-2 bg-slate-700 border border-slate-600 rounded text-white text-sm min-h-[80px]"
+                    className="w-full px-2 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-slate-900 dark:text-white text-sm min-h-[80px]"
                     autoFocus
                   />
                   <div className="flex gap-2">
@@ -335,7 +336,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                   }}
                   className="text-left w-full"
                 >
-                  <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
+                  <p className="text-slate-700 dark:text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
                     {chapter.summary || 'Add a summary...'}
                   </p>
                 </button>
@@ -347,7 +348,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
         {activeTab === 'stats' && (
           <div className="space-y-6">
             <div>
-              <h4 className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
+              <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
                 Statistics
               </h4>
@@ -355,12 +356,12 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                 {chapter.word_count != null && (
                   <div>
                     <p className="text-xs text-slate-400 mb-1">Word Count</p>
-                    <p className="text-white font-medium">{formatWordCountNumber(chapter.word_count)} words</p>
+                    <p className="text-slate-900 dark:text-white font-medium">{formatWordCountNumber(chapter.word_count)} words</p>
                   </div>
                 )}
                 <div>
                   <p className="text-xs text-slate-400 mb-1">Current Content</p>
-                  <p className="text-white text-sm">
+                  <p className="text-slate-900 dark:text-white text-sm">
                     {content.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length} words
                   </p>
                 </div>
@@ -377,7 +378,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
 
         {activeTab === 'outline' && headings.length > 0 && (
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-2">
               <List className="w-4 h-4" />
               Document Outline
             </h4>
@@ -386,7 +387,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                 <button
                   key={`${h.tag}-${i}`}
                   onClick={() => onHeadingClick?.(i)}
-                  className={`w-full text-left px-3 py-2 rounded hover:bg-slate-700 text-slate-200 text-sm transition-colors ${
+                  className={`w-full text-left px-3 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-sm transition-colors ${
                     h.tag === 'H1' ? 'font-semibold' : h.tag === 'H2' ? 'pl-5' : 'pl-7 text-xs'
                   }`}
                 >
@@ -399,7 +400,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
 
         {activeTab === 'history' && snapshots && snapshots.length > 0 && (
           <div className="space-y-4">
-            <h4 className="text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2 flex items-center gap-2">
               <History className="w-4 h-4" />
               Version History
             </h4>
@@ -415,7 +416,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
                     key={snapshot.id}
                     type="button"
                     onClick={() => onRestoreSnapshot?.(snapshot.id)}
-                    className="w-full text-left px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-slate-200 flex items-center justify-between transition-colors"
+                    className="w-full text-left px-3 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 rounded-lg text-xs text-slate-800 dark:text-slate-200 flex items-center justify-between transition-colors"
                   >
                     <span className="flex flex-col">
                       <span>
@@ -433,7 +434,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
 
         {activeTab === 'navigation' && (previousChapterId || nextChapterId) && onNavigateToChapter && (
           <div>
-            <h4 className="text-sm font-medium text-slate-300 mb-3 flex items-center gap-2">
+            <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3 flex items-center gap-2">
               <Navigation className="w-4 h-4" />
               Navigation
             </h4>
@@ -441,7 +442,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
               {previousChapterId && (
                 <button
                   onClick={() => onNavigateToChapter(previousChapterId)}
-                  className="w-full px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-lg transition-colors text-left"
+                  className="w-full px-3 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white text-sm font-medium rounded-lg transition-colors text-left"
                 >
                   ← Previous Chapter
                 </button>
@@ -449,7 +450,7 @@ export const EditorSidebar: React.FC<EditorSidebarProps> = ({
               {nextChapterId && (
                 <button
                   onClick={() => onNavigateToChapter(nextChapterId)}
-                  className="w-full px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-lg transition-colors text-left"
+                  className="w-full px-3 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white text-sm font-medium rounded-lg transition-colors text-left"
                 >
                   Next Chapter →
                 </button>

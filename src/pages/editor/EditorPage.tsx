@@ -11,8 +11,14 @@ import { BookOpen, Plus } from 'lucide-react'
 import { insertChapter } from '@/lib/repository/chaptersRepository'
 import { supabase } from '@/lib/supabase'
 import { useToast } from '@/hooks/ui/useToast'
+import { readLocalStorageJson, writeLocalStorageJson } from '@/utils/localStorage'
 
 export const EditorPage: React.FC = () => {
+  type EditorSession = {
+    manuscriptId: number | null
+    chapterId: number | null
+  }
+
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { toast } = useToast()
@@ -98,30 +104,26 @@ export const EditorPage: React.FC = () => {
       const manuscriptId = parseInt(manuscriptParam, 10)
       if (!isNaN(manuscriptId)) setSelectedManuscriptId(manuscriptId)
     } else {
-      try {
-        const stored = localStorage.getItem(EDITOR_STORAGE_KEY)
-        if (stored) {
-          const { manuscriptId, chapterId } = JSON.parse(stored)
-          if (manuscriptId && manuscripts.some(m => m.id_manuscript === manuscriptId)) {
-            setSelectedManuscriptId(manuscriptId)
-            if (chapterId && chapters.some(c => c.id_chapter === chapterId)) {
-              setSelectedChapterId(chapterId)
-              navigate(`/editor?chapter=${chapterId}`, { replace: true })
-            }
-          }
+      const storedSession = readLocalStorageJson<EditorSession>(EDITOR_STORAGE_KEY)
+
+      if (storedSession?.manuscriptId && manuscripts.some(m => m.id_manuscript === storedSession.manuscriptId)) {
+        setSelectedManuscriptId(storedSession.manuscriptId)
+
+        if (storedSession.chapterId && chapters.some(c => c.id_chapter === storedSession.chapterId)) {
+          setSelectedChapterId(storedSession.chapterId)
+          navigate(`/editor?chapter=${storedSession.chapterId}`, { replace: true })
         }
-      } catch {}
+      }
     }
   }, [searchParams, chapters, manuscripts, navigate])
 
   useEffect(() => {
     if (!selectedManuscriptId && !selectedChapterId) return
-    try {
-      localStorage.setItem(EDITOR_STORAGE_KEY, JSON.stringify({
-        manuscriptId: selectedManuscriptId,
-        chapterId: selectedChapterId,
-      }))
-    } catch {}
+
+    void writeLocalStorageJson(EDITOR_STORAGE_KEY, {
+      manuscriptId: selectedManuscriptId,
+      chapterId: selectedChapterId,
+    })
   }, [selectedManuscriptId, selectedChapterId])
 
   useEffect(() => {
@@ -274,18 +276,18 @@ export const EditorPage: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-full">
-      <div className="p-6 border-b border-slate-700 shrink-0">
+      <div className="p-6 border-b border-slate-200 dark:border-slate-700 shrink-0">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 flex-wrap">
             <div className="flex items-center gap-2">
-              <label htmlFor="manuscript-select" className="text-sm font-medium text-slate-300">
+              <label htmlFor="manuscript-select" className="text-sm font-medium text-slate-700 dark:text-slate-300">
                 Manuscript:
               </label>
               <select
                 id="manuscript-select"
                 value={selectedManuscriptId ?? ''}
                 onChange={handleManuscriptSelect}
-                className="px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 min-w-[200px]"
+                className="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 min-w-[200px]"
               >
                 <option value="">-- Select a manuscript --</option>
                 {manuscripts.map((manuscript) => (
@@ -298,14 +300,14 @@ export const EditorPage: React.FC = () => {
 
             {selectedManuscriptId && (
               <div className="flex items-center gap-2">
-                <label htmlFor="chapter-select" className="text-sm font-medium text-slate-300">
+                <label htmlFor="chapter-select" className="text-sm font-medium text-slate-700 dark:text-slate-300">
                   Chapter:
                 </label>
                 <select
                   id="chapter-select"
                   value={selectedChapterId ?? ''}
                   onChange={handleChapterSelect}
-                  className="px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 min-w-[250px]"
+                  className="px-4 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 min-w-[250px]"
                 >
                   <option value="">-- Select a chapter --</option>
                   {filteredChapters.map((chapter) => (
@@ -337,10 +339,10 @@ export const EditorPage: React.FC = () => {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <BookOpen className="w-16 h-16 text-slate-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
                   Select a manuscript to start editing
                 </h3>
-                <p className="text-slate-400">
+                <p className="text-slate-600 dark:text-slate-400">
                   Choose a manuscript from the dropdown above to view and edit its chapters.
                 </p>
               </div>
@@ -349,10 +351,10 @@ export const EditorPage: React.FC = () => {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <BookOpen className="w-16 h-16 text-slate-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
                   No chapters yet
                 </h3>
-                <p className="text-slate-400 mb-4">
+                <p className="text-slate-600 dark:text-slate-400 mb-4">
                   This manuscript doesn't have any chapters yet. Create one to start writing.
                 </p>
                 <button
@@ -377,7 +379,7 @@ export const EditorPage: React.FC = () => {
               defaultMessage="An error occurred while trying to load the chapter. Please try again."
             />
           ) : selectedChapterId && displayChapter ? (
-            <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 h-full flex flex-col">
+            <div className="bg-white dark:bg-slate-800 rounded-none border border-slate-200 dark:border-slate-700 p-6 h-full flex flex-col">
               <ChapterEditor
                 content={content}
                 onChange={handleContentChange}
@@ -405,10 +407,10 @@ export const EditorPage: React.FC = () => {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <BookOpen className="w-16 h-16 text-slate-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
                   Select a chapter to start editing
                 </h3>
-                <p className="text-slate-400">
+                <p className="text-slate-600 dark:text-slate-400">
                   Choose a chapter from the dropdown above to begin writing.
                 </p>
               </div>

@@ -13,7 +13,9 @@ import { EditorSidebar } from './EditorSidebar'
 import { EditorFooter } from './EditorFooter'
 import { useEditorHistory } from '@/hooks/editor/useEditorHistory'
 import { useEditorPreferences } from '@/hooks/editor/useEditorPreferences'
+import { useTheme } from '@/contexts/theme'
 import type { ChapterRow } from '@/lib/repository/chaptersRepository'
+import { sanitizeEditorHtml } from '@/utils/sanitizeEditorHtml'
 
 interface ChapterEditorProps {
   content: string
@@ -46,6 +48,7 @@ export const ChapterEditor: React.FC<ChapterEditorProps> = ({
   onUpdateChapter,
   onSaveComplete,
 }) => {
+  const { theme: appTheme } = useTheme()
   const [isDistractionFree, setIsDistractionFree] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -81,6 +84,10 @@ export const ChapterEditor: React.FC<ChapterEditorProps> = ({
 
   const getThemeClasses = () => {
     const baseClasses = 'h-full'
+    // Con la app en oscuro, el cromo del editor debe ser oscuro; el “papel” lo pinta el lienzo interior.
+    if (appTheme === 'dark') {
+      return `${baseClasses} bg-slate-900 text-slate-100`
+    }
     switch (preferences.theme) {
       case 'light':
         return `${baseClasses} bg-gray-50 text-gray-900`
@@ -117,7 +124,10 @@ export const ChapterEditor: React.FC<ChapterEditorProps> = ({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        // Avoid duplicate extension registration warning.
+        link: false,
+      }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
@@ -286,10 +296,10 @@ export const ChapterEditor: React.FC<ChapterEditorProps> = ({
       )}
 
       {isDistractionFree && (
-        <div className="flex items-center justify-between p-4 border-b border-slate-700 shrink-0 bg-slate-800">
+        <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 shrink-0 bg-slate-100 dark:bg-slate-800">
           <div className="flex items-center gap-4">
             {chapterTitle && (
-              <h2 className="text-lg font-semibold text-white">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                 {chapterTitle}
               </h2>
             )}
@@ -301,13 +311,13 @@ export const ChapterEditor: React.FC<ChapterEditorProps> = ({
             <button
               onClick={handleSave}
               disabled={isSaving || !hasUnsavedChanges}
-              className="flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:opacity-50 text-white font-medium rounded-lg transition-colors text-sm"
+              className="flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:opacity-50 text-white font-medium rounded-lg transition-colors text-sm"
             >
               {isSaving ? 'Saving...' : 'Save'}
             </button>
             <button
               onClick={() => setIsDistractionFree(false)}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors text-sm"
+              className="flex items-center gap-2 px-3 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-900 dark:text-white font-medium rounded-lg transition-colors text-sm"
               title="Exit distraction-free mode"
             >
               <Minimize2 className="w-4 h-4" />
@@ -331,10 +341,15 @@ export const ChapterEditor: React.FC<ChapterEditorProps> = ({
       <div className="flex-1 relative min-h-0 overflow-hidden flex">
         <div className={`flex-1 relative min-h-0 overflow-auto ${isSidebarOpen ? '' : ''}`}>
           <div
-            className={`h-full border rounded-lg ${isPreviewMode ? 'p-8' : ''} editor-theme-${preferences.theme} ${
-              preferences.theme === 'light' ? 'bg-white border-gray-300' :
-              preferences.theme === 'sepia' ? 'bg-amber-50 border-amber-200' :
-              'bg-slate-900 border-slate-700'
+            data-editor-surface={appTheme === 'dark' ? 'dark' : 'light'}
+            className={`h-full border rounded-none ${isPreviewMode ? 'p-8' : ''} editor-theme-${preferences.theme} ${
+              preferences.theme === 'light'
+                ? 'bg-white border-gray-300 dark:bg-slate-900 dark:border-slate-600'
+                : preferences.theme === 'sepia'
+                  ? 'bg-amber-50 border-amber-200 dark:bg-amber-950/40 dark:border-amber-800/50'
+                  : appTheme === 'dark'
+                    ? 'bg-slate-900 border-slate-600'
+                    : 'bg-slate-50 border-slate-200 dark:border-slate-600'
             } ${preferences.lineNumbers ? 'editor-line-numbers' : ''}`}
           >
             {isPreviewMode ? (
@@ -348,10 +363,10 @@ export const ChapterEditor: React.FC<ChapterEditorProps> = ({
                            preferences.columnWidth === 'wide' ? '1000px' :
                            '100%'
                 }}
-                dangerouslySetInnerHTML={{ __html: content }}
+                dangerouslySetInnerHTML={{ __html: sanitizeEditorHtml(content) }}
               />
             ) : (
-              <EditorContent editor={editor} className="h-full" />
+              <EditorContent editor={editor} className="h-full min-h-0 bg-transparent" />
             )}
           </div>
         </div>

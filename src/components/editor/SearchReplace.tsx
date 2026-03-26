@@ -153,20 +153,20 @@ export const SearchReplace: React.FC<SearchReplaceProps> = ({ editor, isOpen, on
   if (!isOpen) return null
 
   return (
-    <div className="absolute top-0 left-0 right-0 bg-slate-800 border-b border-slate-700 p-4 z-50 shadow-lg">
+    <div className="absolute top-0 left-0 right-0 bg-slate-100 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 p-4 z-50 shadow-lg">
       <div className="max-w-4xl mx-auto flex items-center gap-4">
         <div className="flex-1 flex items-center gap-2">
-          <Search className="w-4 h-4 text-slate-400 shrink-0" />
+          <Search className="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0" />
           <input
             ref={searchInputRef}
             type="text"
             value={searchText}
             onChange={(e) => handleSearchChange(e.target.value)}
             placeholder="Search..."
-            className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="flex-1 px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           {totalMatches > 0 && (
-            <span className="text-xs text-slate-400 shrink-0">
+            <span className="text-xs text-slate-600 dark:text-slate-400 shrink-0">
               {currentMatch} / {totalMatches}
             </span>
           )}
@@ -176,7 +176,7 @@ export const SearchReplace: React.FC<SearchReplaceProps> = ({ editor, isOpen, on
           <button
             onClick={handlePrevious}
             disabled={totalMatches === 0}
-            className="p-2 rounded hover:bg-slate-700 text-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             title="Previous (Shift+Enter)"
           >
             <ChevronUp className="w-4 h-4" />
@@ -184,7 +184,7 @@ export const SearchReplace: React.FC<SearchReplaceProps> = ({ editor, isOpen, on
           <button
             onClick={handleNext}
             disabled={totalMatches === 0}
-            className="p-2 rounded hover:bg-slate-700 text-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             title="Next (Enter)"
           >
             <ChevronDown className="w-4 h-4" />
@@ -192,31 +192,31 @@ export const SearchReplace: React.FC<SearchReplaceProps> = ({ editor, isOpen, on
         </div>
 
         <div className="flex items-center gap-2">
-          <Replace className="w-4 h-4 text-slate-400 shrink-0" />
+          <Replace className="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0" />
           <input
             type="text"
             value={replaceText}
             onChange={(e) => setReplaceText(e.target.value)}
             placeholder="Replace..."
-            className="w-48 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-48 px-3 py-2 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
           <button
             onClick={handleReplace}
             disabled={!searchText || totalMatches === 0}
-            className="px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
           >
             Replace
           </button>
           <button
             onClick={handleReplaceAll}
             disabled={!searchText || totalMatches === 0}
-            className="px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-3 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
           >
             Replace All
           </button>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
+        <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300 cursor-pointer">
           <input
             type="checkbox"
             checked={matchCase}
@@ -226,14 +226,14 @@ export const SearchReplace: React.FC<SearchReplaceProps> = ({ editor, isOpen, on
                 handleSearchChange(searchText)
               }
             }}
-            className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-purple-600 focus:ring-purple-500"
+            className="w-4 h-4 rounded border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-700 text-purple-600 focus:ring-purple-500"
           />
           <span>Match case</span>
         </label>
 
         <button
           onClick={onClose}
-          className="p-2 rounded hover:bg-slate-700 text-slate-300 transition-colors"
+          className="p-2 rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"
           title="Close (Esc)"
         >
           <X className="w-4 h-4" />
