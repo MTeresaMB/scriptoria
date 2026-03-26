@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import jsPDF from 'jspdf'
+import { escapeHtml, sanitizeEditorHtml } from '@/utils/sanitizeEditorHtml'
 
 interface UseExportProps {
   content: string
@@ -9,13 +10,13 @@ interface UseExportProps {
 export const useExport = ({ content, chapterTitle = 'Chapter' }: UseExportProps) => {
   const htmlToText = useCallback((html: string): string => {
     const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = html
+    tempDiv.innerHTML = sanitizeEditorHtml(html)
     return tempDiv.textContent || tempDiv.innerText || ''
   }, [])
 
   const htmlToMarkdown = useCallback((html: string): string => {
     const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = html
+    tempDiv.innerHTML = sanitizeEditorHtml(html)
 
     // Convert headings
     tempDiv.querySelectorAll('h1').forEach((el) => {
@@ -121,12 +122,14 @@ export const useExport = ({ content, chapterTitle = 'Chapter' }: UseExportProps)
   }, [content, chapterTitle, htmlToText])
 
   const exportToHTML = useCallback(() => {
+    const safeTitle = escapeHtml(chapterTitle)
+    const safeBody = sanitizeEditorHtml(content)
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${chapterTitle}</title>
+    <title>${safeTitle}</title>
     <style>
         body {
             font-family: Georgia, serif;
@@ -146,8 +149,8 @@ export const useExport = ({ content, chapterTitle = 'Chapter' }: UseExportProps)
     </style>
 </head>
 <body>
-    <h1>${chapterTitle}</h1>
-    ${content}
+    <h1>${safeTitle}</h1>
+    ${safeBody}
 </body>
 </html>`
     
